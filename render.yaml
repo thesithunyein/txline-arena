@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: txline-arena-api
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+      - key: LIVE_MODE
+        value: "false"
+      - key: DETECTION_Z_SCORE_THRESHOLD
+        value: "2.0"
+      - key: DETECTION_PCT_CHANGE_THRESHOLD
+        value: "10"
+      - key: ODDS_WINDOW_SIZE
+        value: "20"
+      - key: AGENT_BANKROLL
+        value: "1000"
+      - key: TXLINE_BASE_URL
+        value: https://txline.txodds.com
+      - key: SOLANA_RPC_URL
+        value: https://api.devnet.solana.com
+    healthCheckPath: /health
+
+  - type: web
+    name: txline-arena-dashboard
+    env: node
+    buildCommand: cd web && npm install && npm run build
+    startCommand: cd web && npx next start -p $PORT
+    envVars:
+      - key: BACKEND_URL
+        fromService:
+          type: web
+          name: txline-arena-api
+          property: hosturl
+      - key: NEXT_PUBLIC_WS_URL
+        value: ""
+      - key: NEXT_PUBLIC_API_URL
+        value: ""

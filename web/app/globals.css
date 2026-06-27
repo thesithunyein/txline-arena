@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background-color: #0a0e14;
+  color: #e2e8f0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.card {
+  @apply bg-bg-card rounded-xl border border-white/5 p-5;
+}
+
+.card-hover {
+  @apply transition-all hover:border-white/10 hover:bg-bg-hover;
+}
+
+.badge {
+  @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
+}
+
+.badge-green {
+  @apply bg-accent-green/15 text-accent-green;
+}
+
+.badge-red {
+  @apply bg-accent-red/15 text-accent-red;
+}
+
+.badge-yellow {
+  @apply bg-accent-yellow/15 text-accent-yellow;
+}
+
+.badge-blue {
+  @apply bg-accent/15 text-accent;
+}
+
+.badge-purple {
+  @apply bg-accent-purple/15 text-accent-purple;
+}
+
+.badge-gray {
+  @apply bg-white/5 text-gray-400;
+}
+
+.stat-value {
+  @apply text-2xl font-bold text-white;
+}
+
+.stat-label {
+  @apply text-xs uppercase tracking-wide text-gray-500;
+}
+
+.nav-link {
+  @apply flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-gray-400 transition-colors hover:bg-white/5 hover:text-white;
+}
+
+.nav-link-active {
+  @apply bg-accent/10 text-accent;
+}
+
+.btn {
+  @apply rounded-lg px-4 py-2 text-sm font-medium transition-colors;
+}
+
+.btn-primary {
+  @apply bg-accent text-white hover:bg-accent-hover;
+}
+
+.btn-secondary {
+  @apply bg-white/5 text-gray-300 hover:bg-white/10;
+}
