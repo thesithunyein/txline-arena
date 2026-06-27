@@ -4,6 +4,7 @@ import http from 'http';
 import { WebSocketServer, WebSocket } from 'ws';
 import { ArenaManager, ArenaEvent } from '../arena/manager';
 import { getRecentSignals, getAgentPositions, getLeaderboard, getMatches, getAllPositions } from '../db/database';
+import { BacktestEngine, generateSyntheticBacktestData } from '../backtest/engine';
 
 export class Server {
   private app: express.Application;
@@ -76,6 +77,19 @@ export class Server {
         mode: process.env.LIVE_MODE === 'true' ? 'live' : 'simulation',
         timestamp: Date.now(),
       });
+    });
+
+    this.app.post('/api/backtest', (req, res) => {
+      const numMatches = Math.min(parseInt(req.body?.matches as string) || 10, 50);
+      const data = generateSyntheticBacktestData(numMatches);
+      const engine = new BacktestEngine({
+        initialBankroll: parseFloat(req.body?.bankroll as string) || 1000,
+        zScoreThreshold: parseFloat(req.body?.zThreshold as string) || 2.0,
+        pctChangeThreshold: parseFloat(req.body?.pctThreshold as string) || 10,
+        windowSize: parseInt(req.body?.windowSize as string) || 20,
+      });
+      const result = engine.run(data);
+      res.json(result);
     });
   }
 

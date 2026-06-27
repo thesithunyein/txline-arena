@@ -238,9 +238,10 @@ txline-arena/
 │   ├── server/          # REST API + WebSocket
 │   │   └── index.ts
 │   └── index.ts         # Main entry point
-├── scripts/             # Solana scripts
+├── scripts/             # Solana + backtest scripts
 │   ├── subscribe.ts
-│   └── activate.ts
+│   ├── activate.ts
+│   └── backtest.ts
 ├── web/                 # Next.js dashboard
 │   ├── app/
 │   │   ├── page.tsx         # Overview
@@ -251,21 +252,66 @@ txline-arena/
 │   ├── components/
 │   ├── lib/
 │   └── ...
+├── tests/              # Unit tests (Jest)
+│   ├── engine.test.ts
+│   ├── agents.test.ts
+│   └── backtest.test.ts
 ├── package.json
 ├── tsconfig.json
+├── vercel.json         # Vercel deployment config
+├── render.yaml         # Render deployment config
 └── .env.example
 ```
 
 ## Deployment
 
-### Render.com (Free Tier)
+### Frontend — Vercel
 
-1. **Backend**: Web Service — build command `npm run build`, start command `npm start`
-2. **Frontend**: Static Site — build command `cd web && npm run build`, publish directory `web/out`
+1. Push repo to GitHub
+2. Import project on [vercel.com](https://vercel.com)
+3. Framework preset: Next.js
+4. Root directory: `web`
+5. Deploy — `vercel.json` handles API proxying to the backend
+
+### Backend — Render.com (Free Tier)
+
+1. Create a new Web Service on [render.com](https://render.com)
+2. Connect your GitHub repo
+3. Build command: `npm install && npm run build`
+4. Start command: `npm start`
+5. Set environment variables from `.env.example`
+6. Set `LIVE_MODE=true` for live TxLINE data
 
 ### Environment Variables for Production
 
 Set all variables from `.env.example` in your Render dashboard. Set `LIVE_MODE=true` for live TxLINE data.
+
+## Testing
+
+```bash
+npm test
+```
+
+Runs unit tests for:
+- Sharp movement detector (z-score, odds window, signal generation)
+- Strategy agents (momentum, reversion, value, market maker, settlement)
+- Backtest engine (equity curves, max drawdown, signal detection)
+
+## TxLINE API Experience
+
+### What we loved
+
+- **Single normalised JSON schema** across all competitions — made ingestion trivial. No need to handle different formats for different leagues.
+- **Cryptographic anchoring on Solana** — the Merkle proof validation endpoint gave us confidence that odds and score data hadn't been tampered with. This was a key differentiator for our on-chain settlement flow.
+- **Real-time SSE streams** — the streaming endpoints for odds and scores were fast and reliable, perfect for our 60-second sharp movement detection cycle.
+- **Zero-cost access during the hackathon** — waiving commercial data fees let us focus on building rather than budgeting.
+
+### Where we hit friction
+
+- **Auth flow complexity** — the guest JWT → Solana signature → API token activation flow took some iteration to get right. More code examples in the quickstart would help.
+- **Stream reconnection** — SSE connections occasionally dropped; we had to implement exponential backoff reconnection. A heartbeat/ping mechanism would be helpful.
+- **Historical data access** — for backtesting, we needed historical odds snapshots. A dedicated historical endpoint with pagination would be better than scraping the live feed.
+- **Rate limit documentation** — the rate limits weren't clearly documented. We implemented a conservative token-bucket limiter (60 req/min) but had to guess the actual limits.
 
 ## License
 
