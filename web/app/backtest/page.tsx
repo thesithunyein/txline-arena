@@ -65,15 +65,17 @@ export default function BacktestPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-white">Backtest Results</h1>
-        <p className="text-sm text-gray-500">Replay historical odds data through the arena&apos;s strategy agents</p>
+        <h1 className="text-3xl font-bold gradient-text">Backtest Results</h1>
+        <p className="text-sm text-gray-500 mt-1">Replay historical odds data through the arena&apos;s strategy agents</p>
       </div>
 
       <div className="card">
-        <div className="flex items-center gap-2 mb-4">
-          <BarChart3 className="h-4 w-4 text-accent" />
+        <div className="flex items-center gap-2 mb-5">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent/10">
+            <BarChart3 className="h-4 w-4 text-accent" />
+          </div>
           <h3 className="text-sm font-semibold text-white">Run a Backtest</h3>
         </div>
         <div className="flex flex-wrap items-end gap-4">
@@ -204,8 +206,10 @@ export default function BacktestPage() {
       )}
 
       {!result && !loading && (
-        <div className="card text-center py-12">
-          <BarChart3 className="h-12 w-12 text-gray-600 mx-auto mb-3" />
+        <div className="card text-center py-16">
+          <div className="h-14 w-14 rounded-2xl bg-white/5 mx-auto mb-4 flex items-center justify-center">
+            <BarChart3 className="h-7 w-7 text-gray-600" />
+          </div>
           <p className="text-sm text-gray-500">Run a backtest to see performance results across all agents.</p>
         </div>
       )}

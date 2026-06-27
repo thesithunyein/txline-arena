@@ -8,16 +8,18 @@ export default function OnChainPage() {
   const explorerBase = 'https://explorer.solana.com';
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-white">On-Chain Settlement</h1>
-        <p className="text-sm text-gray-500">Solana devnet — Anchor program with SPL token transfers and Merkle proof validation</p>
+        <h1 className="text-3xl font-bold gradient-text">On-Chain Settlement</h1>
+        <p className="text-sm text-gray-500 mt-1">Solana devnet — Anchor program with SPL token transfers and Merkle proof validation</p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <div className="card">
-          <div className="flex items-center gap-2 mb-4">
-            <Link2 className="h-4 w-4 text-accent-purple" />
+        <div className="card card-glow">
+          <div className="flex items-center gap-2 mb-5">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent-purple/10">
+              <Link2 className="h-4 w-4 text-accent-purple" />
+            </div>
             <h3 className="text-sm font-semibold text-white">Program Details</h3>
           </div>
           <div className="space-y-3">
@@ -29,9 +31,11 @@ export default function OnChainPage() {
           </div>
         </div>
 
-        <div className="card">
-          <div className="flex items-center gap-2 mb-4">
-            <Shield className="h-4 w-4 text-accent-green" />
+        <div className="card card-glow">
+          <div className="flex items-center gap-2 mb-5">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent-green/10">
+              <Shield className="h-4 w-4 text-accent-green" />
+            </div>
             <h3 className="text-sm font-semibold text-white">Merkle Proof Validation</h3>
           </div>
           <p className="text-sm text-gray-400 mb-3">
@@ -56,8 +60,10 @@ export default function OnChainPage() {
       </div>
 
       <div className="card">
-        <div className="flex items-center gap-2 mb-4">
-          <Coins className="h-4 w-4 text-accent-yellow" />
+        <div className="flex items-center gap-2 mb-5">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent-yellow/10">
+            <Coins className="h-4 w-4 text-accent-yellow" />
+          </div>
           <h3 className="text-sm font-semibold text-white">Settlement Flow</h3>
         </div>
         <div className="grid grid-cols-1 gap-3 md:grid-cols-5">
@@ -69,12 +75,12 @@ export default function OnChainPage() {
             { step: '5', title: 'Settlement', desc: 'P&L transferred via Anchor program' },
           ].map((s, i) => (
             <div key={s.step} className="relative">
-              <div className="rounded-lg bg-white/5 p-3">
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-accent/20 text-accent text-xs font-bold mb-2">
+              <div className="rounded-xl bg-white/[0.03] border border-white/[0.04] p-4 transition-all hover:bg-white/[0.06]">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-accent-purple text-white text-xs font-bold mb-2.5">
                   {s.step}
                 </div>
                 <p className="text-sm font-medium text-white">{s.title}</p>
-                <p className="text-xs text-gray-500 mt-1">{s.desc}</p>
+                <p className="text-[11px] text-gray-500 mt-1 leading-relaxed">{s.desc}</p>
               </div>
               {i < 4 && <div className="hidden md:block absolute top-1/2 -right-2 h-px w-4 bg-white/10" />}
             </div>
@@ -83,13 +89,13 @@ export default function OnChainPage() {
       </div>
 
       <div className="card">
-        <h3 className="text-sm font-semibold text-white mb-3">Instructions</h3>
-        <div className="space-y-2 text-sm text-gray-400">
-          <p>1. Generate a Solana keypair: <code className="rounded bg-white/5 px-1.5 py-0.5 text-accent">solana-keygen new -o keypair.json</code></p>
-          <p>2. Set <code className="rounded bg-white/5 px-1.5 py-0.5 text-accent">SOLANA_WALLET_KEYPAIR_PATH</code> in .env</p>
-          <p>3. Subscribe to TxLINE: <code className="rounded bg-white/5 px-1.5 py-0.5 text-accent">npm run subscribe</code></p>
-          <p>4. Activate API token: <code className="rounded bg-white/5 px-1.5 py-0.5 text-accent">npm run activate</code></p>
-          <p>5. Start the arena: <code className="rounded bg-white/5 px-1.5 py-0.5 text-accent">npm run dev</code></p>
+        <h3 className="text-sm font-semibold text-white mb-4">Instructions</h3>
+        <div className="space-y-2.5 text-sm text-gray-400">
+          <p className="flex items-start gap-2"><span className="text-gray-600 font-mono text-xs mt-0.5">1.</span> Generate a Solana keypair: <code className="rounded bg-white/5 px-1.5 py-0.5 text-accent font-mono text-xs">solana-keygen new -o keypair.json</code></p>
+          <p className="flex items-start gap-2"><span className="text-gray-600 font-mono text-xs mt-0.5">2.</span> Set <code className="rounded bg-white/5 px-1.5 py-0.5 text-accent font-mono text-xs">SOLANA_WALLET_KEYPAIR_PATH</code> in .env</p>
+          <p className="flex items-start gap-2"><span className="text-gray-600 font-mono text-xs mt-0.5">3.</span> Subscribe to TxLINE: <code className="rounded bg-white/5 px-1.5 py-0.5 text-accent font-mono text-xs">npm run subscribe</code></p>
+          <p className="flex items-start gap-2"><span className="text-gray-600 font-mono text-xs mt-0.5">4.</span> Activate API token: <code className="rounded bg-white/5 px-1.5 py-0.5 text-accent font-mono text-xs">npm run activate</code></p>
+          <p className="flex items-start gap-2"><span className="text-gray-600 font-mono text-xs mt-0.5">5.</span> Start the arena: <code className="rounded bg-white/5 px-1.5 py-0.5 text-accent font-mono text-xs">npm run dev</code></p>
         </div>
       </div>
     </div>

@@ -40,10 +40,10 @@ export default function AgentsPage() {
   const agentPositions = selectedAgent ? positions.filter((p) => p.agentName === selectedAgent) : positions;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-white">Trading Agents</h1>
-        <p className="text-sm text-gray-500">Autonomous strategy agents competing in the arena</p>
+        <h1 className="text-3xl font-bold gradient-text">Trading Agents</h1>
+        <p className="text-sm text-gray-500 mt-1">Autonomous strategy agents competing in the arena</p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -52,35 +52,37 @@ export default function AgentsPage() {
           return (
             <div
               key={agent.name}
-              className={`card card-hover cursor-pointer ${selectedAgent === agent.name ? 'border-accent/30' : ''}`}
+              className={`card card-hover cursor-pointer ${selectedAgent === agent.name ? 'border-accent/30 glow-blue' : ''}`}
               onClick={() => setSelectedAgent(selectedAgent === agent.name ? null : agent.name)}
             >
               <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <Bot className="h-5 w-5 text-accent" />
-                  <span className="font-semibold text-white">{agent.name}</span>
+                <div className="flex items-center gap-2.5">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent/10">
+                    <Bot className="h-5 w-5 text-accent" />
+                  </div>
+                  <span className="font-semibold text-white text-sm">{agent.name}</span>
                 </div>
                 {agent.paused && <span className="badge badge-yellow"><Pause className="h-3 w-3" /> Paused</span>}
               </div>
-              <p className="text-xs text-gray-500 mb-3 line-clamp-2">{agent.strategy}</p>
-              <div className="grid grid-cols-2 gap-2 text-sm">
+              <p className="text-[11px] text-gray-500 mb-4 line-clamp-2 leading-relaxed">{agent.strategy}</p>
+              <div className="grid grid-cols-2 gap-3 text-sm">
                 <div>
-                  <p className="text-xs text-gray-500">Bankroll</p>
-                  <p className="font-semibold text-white">{agent.bankroll.toFixed(0)} USDC</p>
+                  <p className="text-[11px] text-gray-500 mb-0.5">Bankroll</p>
+                  <p className="font-semibold text-white tabular-nums">{agent.bankroll.toFixed(0)} USDC</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">P&L</p>
-                  <p className={`font-semibold ${agent.totalPnl >= 0 ? 'text-accent-green' : 'text-accent-red'}`}>
+                  <p className="text-[11px] text-gray-500 mb-0.5">P&L</p>
+                  <p className={`font-semibold tabular-nums ${agent.totalPnl >= 0 ? 'text-accent-green' : 'text-accent-red'}`}>
                     {formatPnl(agent.totalPnl)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Win Rate</p>
-                  <p className="font-semibold text-white">{(agent.winRate * 100).toFixed(0)}%</p>
+                  <p className="text-[11px] text-gray-500 mb-0.5">Win Rate</p>
+                  <p className="font-semibold text-white tabular-nums">{(agent.winRate * 100).toFixed(0)}%</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">ROI</p>
-                  <p className={`font-semibold ${agent.roi >= 0 ? 'text-accent-green' : 'text-accent-red'}`}>
+                  <p className="text-[11px] text-gray-500 mb-0.5">ROI</p>
+                  <p className={`font-semibold tabular-nums ${agent.roi >= 0 ? 'text-accent-green' : 'text-accent-red'}`}>
                     {formatPct(agent.roi)}
                   </p>
                 </div>

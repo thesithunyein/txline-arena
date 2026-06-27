@@ -26,29 +26,29 @@ export default function SignalsPage() {
   const accuracy = total > 0 ? (correct / total) * 100 : 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-white">Sharp Movement Signals</h1>
-        <p className="text-sm text-gray-500">Real-time odds movement detection with prediction tracking</p>
+        <h1 className="text-3xl font-bold gradient-text">Sharp Movement Signals</h1>
+        <p className="text-sm text-gray-500 mt-1">Real-time odds movement detection with prediction tracking</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <div className="card">
+        <div className="card card-hover">
           <p className="stat-label">Total Signals</p>
-          <p className="mt-2 stat-value">{signals.length}</p>
+          <p className="mt-3 stat-value">{signals.length}</p>
         </div>
-        <div className="card">
+        <div className="card card-hover">
           <p className="stat-label">Shortening</p>
-          <p className="mt-2 stat-value text-accent-green">{signals.filter((s) => s.direction === 'shortening').length}</p>
+          <p className="mt-3 stat-value text-accent-green">{signals.filter((s) => s.direction === 'shortening').length}</p>
         </div>
-        <div className="card">
+        <div className="card card-hover">
           <p className="stat-label">Lengthening</p>
-          <p className="mt-2 stat-value text-accent-red">{signals.filter((s) => s.direction === 'lengthening').length}</p>
+          <p className="mt-3 stat-value text-accent-red">{signals.filter((s) => s.direction === 'lengthening').length}</p>
         </div>
-        <div className="card">
+        <div className="card card-hover">
           <p className="stat-label">Prediction Accuracy</p>
-          <p className="mt-2 stat-value">{accuracy.toFixed(1)}%</p>
-          <p className="text-xs text-gray-500">{correct}/{total} settled</p>
+          <p className="mt-3 stat-value">{accuracy.toFixed(1)}%</p>
+          <p className="text-[11px] text-gray-500 mt-1">{correct}/{total} settled</p>
         </div>
       </div>
 
