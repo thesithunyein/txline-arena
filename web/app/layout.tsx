@@ -12,21 +12,21 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark">
-      <body className="min-h-screen bg-bg text-gray-200 antialiased">
+    <html lang="en" className="light">
+      <body className="min-h-screen bg-bg text-gray-900 antialiased">
         <Navbar />
-        <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 animate-fade-in">
+        <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 animate-fade-in">
           {children}
         </main>
-        <footer className="border-t border-white/[0.04] py-6 mt-12">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <p className="text-xs text-gray-600 text-center">
-              TxLINE Arena — Powered by{' '}
-              <a href="https://txline.txodds.com" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-accent transition-colors">
+        <footer className="border-t border-gray-200 py-8 mt-20">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <p className="text-sm text-gray-400 text-center">
+              TxLINE Arena — Autonomous multi-agent trading arena powered by{' '}
+              <a href="https://txline.txodds.com" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-900 transition-colors">
                 TxLINE
               </a>
-              {' · '}
-              <a href="https://solana.com" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-accent transition-colors">
+              {' and '}
+              <a href="https://solana.com" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-900 transition-colors">
                 Solana
               </a>
             </p>

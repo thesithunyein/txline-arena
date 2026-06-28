@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Bot, Pause, TrendingUp, TrendingDown } from 'lucide-react';
+import { Bot, Pause } from 'lucide-react';
 import { fetchApi, AgentData, PositionData, LeaderboardEntry } from '../../lib/api';
 import { useWebSocket, ArenaEvent } from '../../lib/ws';
 import { formatPnl, formatPct } from '../../lib/utils';
@@ -40,61 +40,60 @@ export default function AgentsPage() {
   const agentPositions = selectedAgent ? positions.filter((p) => p.agentName === selectedAgent) : positions;
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold gradient-text">Trading Agents</h1>
-        <p className="text-sm text-gray-500 mt-1">Autonomous strategy agents competing in the arena</p>
+    <div className="space-y-10">
+      <div className="text-center">
+        <h1 className="page-header mb-3">Trading Agents</h1>
+        <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+          Autonomous strategy agents competing in the arena. Click an agent to filter its positions.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {agents.map((agent) => {
-          const lb = leaderboard.find((l) => l.name === agent.name);
-          return (
-            <div
-              key={agent.name}
-              className={`card card-hover cursor-pointer ${selectedAgent === agent.name ? 'border-accent/30 glow-blue' : ''}`}
-              onClick={() => setSelectedAgent(selectedAgent === agent.name ? null : agent.name)}
-            >
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2.5">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent/10">
-                    <Bot className="h-5 w-5 text-accent" />
-                  </div>
-                  <span className="font-semibold text-white text-sm">{agent.name}</span>
+        {agents.map((agent) => (
+          <div
+            key={agent.name}
+            className={`card card-hover cursor-pointer ${selectedAgent === agent.name ? 'border-gray-900 ring-1 ring-gray-900' : ''}`}
+            onClick={() => setSelectedAgent(selectedAgent === agent.name ? null : agent.name)}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
+                  <Bot className="h-5 w-5 text-gray-700" />
                 </div>
-                {agent.paused && <span className="badge badge-yellow"><Pause className="h-3 w-3" /> Paused</span>}
+                <span className="font-semibold text-gray-900 text-sm">{agent.name}</span>
               </div>
-              <p className="text-[11px] text-gray-500 mb-4 line-clamp-2 leading-relaxed">{agent.strategy}</p>
-              <div className="grid grid-cols-2 gap-3 text-sm">
-                <div>
-                  <p className="text-[11px] text-gray-500 mb-0.5">Bankroll</p>
-                  <p className="font-semibold text-white tabular-nums">{agent.bankroll.toFixed(0)} USDC</p>
-                </div>
-                <div>
-                  <p className="text-[11px] text-gray-500 mb-0.5">P&L</p>
-                  <p className={`font-semibold tabular-nums ${agent.totalPnl >= 0 ? 'text-accent-green' : 'text-accent-red'}`}>
-                    {formatPnl(agent.totalPnl)}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-[11px] text-gray-500 mb-0.5">Win Rate</p>
-                  <p className="font-semibold text-white tabular-nums">{(agent.winRate * 100).toFixed(0)}%</p>
-                </div>
-                <div>
-                  <p className="text-[11px] text-gray-500 mb-0.5">ROI</p>
-                  <p className={`font-semibold tabular-nums ${agent.roi >= 0 ? 'text-accent-green' : 'text-accent-red'}`}>
-                    {formatPct(agent.roi)}
-                  </p>
-                </div>
+              {agent.paused && <span className="badge badge-yellow"><Pause className="h-3 w-3" /> Paused</span>}
+            </div>
+            <p className="text-xs text-gray-500 mb-5 line-clamp-2 leading-relaxed">{agent.strategy}</p>
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <p className="text-xs text-gray-500 mb-1">Bankroll</p>
+                <p className="font-semibold text-gray-900 tabular-nums">{agent.bankroll.toFixed(0)} USDC</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 mb-1">P&L</p>
+                <p className={`font-semibold tabular-nums ${agent.totalPnl >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                  {formatPnl(agent.totalPnl)}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 mb-1">Win Rate</p>
+                <p className="font-semibold text-gray-900 tabular-nums">{(agent.winRate * 100).toFixed(0)}%</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 mb-1">ROI</p>
+                <p className={`font-semibold tabular-nums ${agent.roi >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                  {formatPct(agent.roi)}
+                </p>
               </div>
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
 
       <div className="card">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-white">
+        <div className="flex items-center justify-between mb-5">
+          <h3 className="text-sm font-semibold text-gray-900">
             Positions {selectedAgent && `— ${selectedAgent}`}
           </h3>
           <span className="badge badge-gray">{agentPositions.length} total</span>
@@ -102,26 +101,26 @@ export default function AgentsPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-white/5 text-left text-xs uppercase tracking-wide text-gray-500">
-                <th className="pb-3 pr-4">Agent</th>
-                <th className="pb-3 pr-4">Fixture</th>
-                <th className="pb-3 pr-4">Side</th>
-                <th className="pb-3 pr-4 text-right">Stake</th>
-                <th className="pb-3 pr-4 text-right">Odds</th>
-                <th className="pb-3 pr-4">Status</th>
-                <th className="pb-3 text-right">P&L</th>
+              <tr className="border-b border-gray-100 text-left text-xs text-gray-500">
+                <th className="pb-3 pr-4 font-medium">Agent</th>
+                <th className="pb-3 pr-4 font-medium">Fixture</th>
+                <th className="pb-3 pr-4 font-medium">Side</th>
+                <th className="pb-3 pr-4 text-right font-medium">Stake</th>
+                <th className="pb-3 pr-4 text-right font-medium">Odds</th>
+                <th className="pb-3 pr-4 font-medium">Status</th>
+                <th className="pb-3 text-right font-medium">P&L</th>
               </tr>
             </thead>
             <tbody>
               {agentPositions.map((pos) => (
-                <tr key={pos.id} className="border-b border-white/5 hover:bg-white/5">
-                  <td className="py-3 pr-4 text-white font-medium">{pos.agentName}</td>
-                  <td className="py-3 pr-4 text-gray-400">#{pos.fixtureId}</td>
+                <tr key={pos.id} className="border-b border-gray-100 hover:bg-gray-50">
+                  <td className="py-3 pr-4 text-gray-900 font-medium">{pos.agentName}</td>
+                  <td className="py-3 pr-4 text-gray-500 tabular-nums">#{pos.fixtureId}</td>
                   <td className="py-3 pr-4">
                     <span className="badge badge-blue capitalize">{pos.side}</span>
                   </td>
-                  <td className="py-3 pr-4 text-right text-white">{pos.stake.toFixed(2)}</td>
-                  <td className="py-3 pr-4 text-right text-white">{pos.odds.toFixed(2)}</td>
+                  <td className="py-3 pr-4 text-right text-gray-900 tabular-nums">{pos.stake.toFixed(2)}</td>
+                  <td className="py-3 pr-4 text-right text-gray-900 tabular-nums">{pos.odds.toFixed(2)}</td>
                   <td className="py-3 pr-4">
                     {pos.status === 'open' ? (
                       <span className="badge badge-yellow">Open</span>
@@ -129,7 +128,7 @@ export default function AgentsPage() {
                       <span className="badge badge-gray">Settled</span>
                     )}
                   </td>
-                  <td className={`py-3 text-right font-semibold ${pos.pnl !== null ? (pos.pnl >= 0 ? 'text-accent-green' : 'text-accent-red') : 'text-gray-500'}`}>
+                  <td className={`py-3 text-right font-semibold tabular-nums ${pos.pnl !== null ? (pos.pnl >= 0 ? 'text-emerald-600' : 'text-red-600') : 'text-gray-500'}`}>
                     {pos.pnl !== null ? formatPnl(pos.pnl) : '—'}
                   </td>
                 </tr>
@@ -137,7 +136,7 @@ export default function AgentsPage() {
             </tbody>
           </table>
           {agentPositions.length === 0 && (
-            <p className="text-sm text-gray-500 py-8 text-center">No positions yet.</p>
+            <p className="text-sm text-gray-500 py-12 text-center">No positions yet.</p>
           )}
         </div>
       </div>
