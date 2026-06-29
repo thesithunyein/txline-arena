@@ -2,7 +2,7 @@
 
 **Autonomous In-Play Trading Agent Platform on Solana**
 
-TxLINE Arena is a multi-agent autonomous trading arena that ingests real-time TxLINE sports data feeds, detects sharp odds movements, and executes strategy-driven positions with on-chain settlement on Solana devnet.
+TxLINE Arena is a multi-agent autonomous trading arena that ingests real-time TxLINE sports data feeds, detects sharp odds movements, and runs competing strategy agents. It activates data access with a real Solana devnet transaction and verifies every outcome against TxLINE's Solana-anchored feed before settling positions deterministically.
 
 ## Overview
 
@@ -10,8 +10,9 @@ TxLINE Arena is a multi-agent autonomous trading arena that ingests real-time Tx
 - **4 Strategy Agents**: Momentum, Mean Reversion, Value, and Market Maker — each with Kelly Criterion position sizing
 - **Agent vs Agent Arena**: Agents compete on the same TxLINE feed; leaderboard ranks by P&L, ROI, win rate, Sharpe ratio
 - **Circuit Breaker**: Auto-pauses agents after consecutive losses to prevent capital drain
-- **On-Chain Settlement**: Solana Anchor program with SPL token transfers and Merkle proof validation
-- **Simulation Mode**: GBM-calibrated synthetic data engine for demos when no live matches
+- **On-Chain Data Access**: Real Solana devnet subscription transaction to the TxLINE program; outcomes verified via the TxLINE `stat-validation` endpoint before deterministic settlement
+- **Prediction Accuracy Tracking**: Every signal is scored against the eventual match result to measure real predictive edge
+- **Simulation / Replay Mode**: Deterministic synthetic data engine so the dashboard always demonstrates the product, even after matches end
 - **Real-Time Dashboard**: Next.js 14 dashboard with WebSocket live updates
 - **Telegram Alerts**: Real-time signal, position, and settlement notifications
 
@@ -42,8 +43,8 @@ TxLINE Arena is a multi-agent autonomous trading arena that ingests real-time Tx
 │               └────────────┬─────────────────────┘       │
 │                            │                             │
 │               ┌────────────▼─────────────────────┐       │
-│               │     Solana Devnet Settlement     │       │
-│               │   (Anchor + SPL + Merkle Proof)  │       │
+│               │   Deterministic Settlement +     │       │
+│               │  TxLINE stat-validation check    │       │
 │               └──────────────────────────────────┘       │
 │                                                          │
 │  ┌──────────┐  ┌──────────┐  ┌──────────────────────┐   │
@@ -68,7 +69,7 @@ TxLINE Arena is a multi-agent autonomous trading arena that ingests real-time Tx
 
 - Node.js 18+
 - npm or yarn
-- A Solana keypair (for on-chain settlement)
+- A Solana keypair (for the on-chain TxLINE data subscription)
 
 ### Installation
 
@@ -171,14 +172,16 @@ LIVE_MODE=false npm run dev
 | TxLINE Endpoint | Usage |
 |----------------|-------|
 | `POST /auth/guest/start` | Guest JWT for initial auth |
-| `POST /api/token/activate` | Activate API token with Solana signature |
-| `GET /api/fixtures` | Fetch match fixtures |
-| `GET /api/odds/:fixtureId` | Fetch current odds for a fixture |
-| `GET /api/scores/:fixtureId` | Fetch live scores |
-| `GET /api/historical/:fixtureId` | Historical odds data for backtesting |
-| `GET /api/stats/validate` | Validate Merkle proof for data integrity |
-| `SSE /stream/odds` | Live odds stream |
-| `SSE /stream/scores` | Live score stream |
+| `POST /api/token/activate` | Activate API token with Solana wallet signature |
+| `GET /api/fixtures/snapshot` | Fetch World Cup match fixtures |
+| `GET /api/odds/snapshot/:fixtureId` | Current consensus odds for a fixture |
+| `GET /api/odds/updates/:epochDay/:hourOfDay/:interval` | Historical odds updates (backtesting) |
+| `GET /api/scores/snapshot/:fixtureId` | Current score state |
+| `GET /api/scores/updates/:fixtureId` | Score updates for a fixture |
+| `GET /api/scores/historical/:fixtureId` | Full historical score timeline (gzip) |
+| `GET /api/scores/stat-validation` | Verify a score/stat update before settlement |
+| `GET /api/odds/stream` (SSE) | Live odds stream feeding the detector |
+| `GET /api/scores/stream` (SSE) | Live score stream driving settlement |
 
 ## Strategy Agents
 
@@ -302,8 +305,8 @@ Runs unit tests for:
 ### What we loved
 
 - **Single normalised JSON schema** across all competitions — made ingestion trivial. No need to handle different formats for different leagues.
-- **Cryptographic anchoring on Solana** — the Merkle proof validation endpoint gave us confidence that odds and score data hadn't been tampered with. This was a key differentiator for our on-chain settlement flow.
-- **Real-time SSE streams** — the streaming endpoints for odds and scores were fast and reliable, perfect for our 60-second sharp movement detection cycle.
+- **Cryptographic anchoring on Solana** — combined with the `stat-validation` endpoint, this gave us a trustable source of truth so our autonomous agents settle only on verified outcome data.
+- **Real-time SSE streams** — the streaming endpoints for odds and scores were fast and reliable, perfect for our sharp movement detection cycle.
 - **Zero-cost access during the hackathon** — waiving commercial data fees let us focus on building rather than budgeting.
 
 ### Where we hit friction
