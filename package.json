@@ -12,11 +12,9 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "start": "node dist/index.js",
     "dev": "cross-env ENV_FILE=.env ts-node src/index.ts",
-    "demo": "cross-env ENV_FILE=.env ts-node scripts/demo.ts",
     "subscribe": "cross-env ENV_FILE=.env ts-node scripts/subscribe.ts",
     "activate": "cross-env ENV_FILE=.env ts-node scripts/activate.ts",
-    "mint-tokens": "cross-env ENV_FILE=.env ts-node scripts/mint-tokens.ts",
-    "fund-agents": "cross-env ENV_FILE=.env ts-node scripts/fund-agents.ts",
+    "settle-onchain": "cross-env ENV_FILE=.env ts-node scripts/settle-onchain.ts",
     "backtest": "cross-env ENV_FILE=.env ts-node scripts/backtest.ts",
     "test": "jest --verbose"
   },

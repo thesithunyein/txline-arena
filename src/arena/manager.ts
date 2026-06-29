@@ -7,6 +7,7 @@ import { Leaderboard } from './leaderboard';
 import { CircuitBreaker } from './circuitBreaker';
 import { computeConsensusOdds } from '../txline/client';
 import { insertSignal, insertPosition, settlePosition, upsertMatch, upsertAgent, updateAgentStats, setAgentPaused } from '../db/database';
+import { anchorSettlement, isOnChainSettlementEnabled } from '../chain/settlement';
 
 export interface ArenaEvent {
   type: 'signal' | 'position_open' | 'position_settle' | 'score_update' | 'leaderboard_update' | 'match_end';
@@ -225,6 +226,31 @@ export class ArenaManager {
 
           if (agent.isPaused()) {
             setAgentPaused(agent.name, Date.now() + 30 * 60 * 1000).catch(() => {});
+          }
+
+          // Anchor the settlement on Solana devnet (non-blocking). When enabled,
+          // the real transaction signature is persisted back to the position.
+          if (isOnChainSettlementEnabled()) {
+            anchorSettlement({
+              positionId: pos.id,
+              agentName: agent.name,
+              fixtureId,
+              side: pos.side,
+              outcome: actualOutcome,
+              won,
+              pnl: result.pnl,
+            })
+              .then((sig) => {
+                if (sig) {
+                  settlePosition(pos.id, result.pnl, sig).catch(() => {});
+                  this.emit({
+                    type: 'position_settle',
+                    data: { positionId: pos.id, agentName: agent.name, fixtureId, settlementTx: sig, onChain: true },
+                    timestamp: Date.now(),
+                  });
+                }
+              })
+              .catch((err) => console.error('On-chain settlement failed:', err?.message || err));
           }
 
           this.emit({
