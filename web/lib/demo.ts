@@ -83,9 +83,15 @@ export function demoSignal(index: number, bucket: number): SignalData {
   const swing = (rng() - 0.4) * 0.6;
   const newOdds = Math.max(1.05, oldOdds + swing);
   const pctChange = ((newOdds - oldOdds) / oldOdds) * 100;
-  const direction = pctChange < 0 ? 'shortening' : 'drifting';
+  const direction = pctChange < 0 ? 'shortening' : 'lengthening';
   const zScore = Math.abs(swing) * 6 + rng() * 1.5;
-  const predicted = rng() > 0.5 ? rng() > 0.4 : null;
+  const confidence = 0.55 + rng() * 0.4;
+  // ~30% of signals are still pending (match not finished); the rest are settled
+  // with a hit-rate that scales with confidence + z-score so stronger signals
+  // genuinely predict better — mirroring the real PredictionTracker.
+  const isPending = rng() < 0.3;
+  const hitProbability = Math.min(0.92, 0.4 + confidence * 0.4 + Math.min(zScore, 4) * 0.04);
+  const predicted = isPending ? null : rng() < hitProbability;
   return {
     id: `sig-${bucket}-${index}`,
     fixtureId: match.fixtureId,
@@ -99,7 +105,7 @@ export function demoSignal(index: number, bucket: number): SignalData {
     pctChange: Number(pctChange.toFixed(2)),
     zScore: Number(zScore.toFixed(2)),
     direction,
-    confidence: Number((0.55 + rng() * 0.4).toFixed(2)),
+    confidence: Number(confidence.toFixed(2)),
     timestamp: Date.now() - index * 45000,
     predicted,
     actualOutcome: predicted === null ? null : predicted ? 'correct' : 'incorrect',

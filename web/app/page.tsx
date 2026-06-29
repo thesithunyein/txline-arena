@@ -8,6 +8,7 @@ import { formatPnl } from '../lib/utils';
 import { LeaderboardCard } from '../components/LeaderboardCard';
 import { LiveSignalsCard } from '../components/LiveSignalsCard';
 import { MatchesCard } from '../components/MatchesCard';
+import { PredictionAccuracyCard } from '../components/PredictionAccuracyCard';
 
 export default function OverviewPage() {
   const [health, setHealth] = useState<HealthData | null>(null);
@@ -21,7 +22,7 @@ export default function OverviewPage() {
       try {
         const [h, s, lb, m] = await Promise.all([
           fetchApi<HealthData>('/health').catch(() => null),
-          fetchApi<SignalData[]>('/signals?limit=20').catch(() => []),
+          fetchApi<SignalData[]>('/signals?limit=200').catch(() => []),
           fetchApi<LeaderboardEntry[]>('/leaderboard').catch(() => []),
           fetchApi<MatchData[]>('/matches').catch(() => []),
         ]);
@@ -74,6 +75,8 @@ export default function OverviewPage() {
         <StatCard icon={Zap} label="Signals Detected" value={String(totalSignals)} />
         <StatCard icon={Activity} label="Live Matches" value={String(liveMatches.length)} />
       </div>
+
+      <PredictionAccuracyCard signals={signals} />
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-8">
