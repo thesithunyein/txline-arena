@@ -3,11 +3,11 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://txline-arena-api.onrender.com/api/:path*"
+      "destination": "https://thesithunyein-txline-arena-api.hf.space/api/:path*"
     },
     {
       "source": "/health",
-      "destination": "https://txline-arena-api.onrender.com/health"
+      "destination": "https://thesithunyein-txline-arena-api.hf.space/health"
     }
   ]
 }
