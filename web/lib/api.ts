@@ -4,15 +4,23 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || '/api';
 // Force the deterministic replay dataset (useful for the public demo link / video).
 const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
 
+// Fail fast if the backend is unreachable or cold-starting (e.g. Render free
+// tier can take 50s+ to spin up) so the dashboard falls back to replay data
+// within a couple of seconds instead of sitting empty.
+const FETCH_TIMEOUT_MS = 2500;
+
 export async function fetchApi<T>(path: string): Promise<T> {
   if (DEMO_MODE) return demoForPath<T>(path);
   try {
-    const res = await fetch(`${API_BASE}${path}`, { cache: 'no-store' });
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+    const res = await fetch(`${API_BASE}${path}`, { cache: 'no-store', signal: controller.signal });
+    clearTimeout(timer);
     if (!res.ok) throw new Error(`API error: ${res.status}`);
     const data = await res.json();
     // Empty live responses (e.g. after matches end) fall back to replay data so
     // the dashboard always demonstrates the product working.
-    if (Array.isArray(data) && data.length === 0) return demoForPath<T>(path);
+    if (data == null || (Array.isArray(data) && data.length === 0)) return demoForPath<T>(path);
     return data as T;
   } catch {
     // No backend reachable (e.g. static Vercel link) — serve replay data.

@@ -39,11 +39,15 @@ export default function BacktestPage() {
   async function runBacktest() {
     setLoading(true);
     try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 4000);
       const res = await fetch('/api/backtest', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ matches: String(matches) }),
+        signal: controller.signal,
       });
+      clearTimeout(timer);
       if (!res.ok) throw new Error('Backtest failed');
       const data = await res.json();
       setResult(data);
