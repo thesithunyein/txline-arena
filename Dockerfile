@@ -1,0 +1,28 @@
+FROM node:20-slim
+
+WORKDIR /app
+
+# Install dependencies first for better layer caching
+COPY package.json package-lock.json* ./
+RUN npm ci --omit=dev=false
+
+# Copy source and build
+COPY tsconfig.json ./
+COPY src/ ./src/
+COPY scripts/ ./scripts/
+RUN npm run build
+
+# Remove dev deps to shrink image
+RUN npm prune --omit=dev
+
+# Hugging Face Spaces uses port 7860 by default
+ENV PORT=7860
+ENV NODE_ENV=production
+ENV LIVE_MODE=false
+ENV TXLINE_BASE_URL=https://txline.txodds.com
+ENV SOLANA_RPC_URL=https://api.devnet.solana.com
+ENV DB_PATH=/tmp/txline_arena.json
+
+EXPOSE 7860
+
+CMD ["node", "dist/index.js"]

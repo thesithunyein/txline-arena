@@ -1,0 +1,10 @@
+node_modules
+dist
+web
+web/node_modules
+web/.next
+.git
+*.md
+.env
+keypair.json
+txline_arena.json
