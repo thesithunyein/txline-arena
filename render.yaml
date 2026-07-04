@@ -24,19 +24,3 @@ services:
       - key: SOLANA_RPC_URL
         value: https://api.devnet.solana.com
     healthCheckPath: /health
-
-  - type: web
-    name: txline-arena-dashboard
-    env: node
-    buildCommand: cd web && npm install && npm run build
-    startCommand: cd web && npx next start -p $PORT
-    envVars:
-      - key: BACKEND_URL
-        fromService:
-          type: web
-          name: txline-arena-api
-          property: hosturl
-      - key: NEXT_PUBLIC_WS_URL
-        value: ""
-      - key: NEXT_PUBLIC_API_URL
-        value: ""
