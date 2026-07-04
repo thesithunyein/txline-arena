@@ -10,7 +10,7 @@ RUN npm install
 COPY tsconfig.json ./
 COPY src/ ./src/
 COPY scripts/ ./scripts/
-RUN npm run build && ls -la dist/ && ls -la dist/index.js
+RUN npm run build && ls -la dist/src/index.js
 
 # Remove dev deps to shrink image
 RUN npm prune --omit=dev
@@ -25,4 +25,4 @@ ENV DB_PATH=/tmp/txline_arena.json
 
 EXPOSE 7860
 
-CMD ["node", "dist/index.js"]
+CMD ["node", "dist/src/index.js"]
