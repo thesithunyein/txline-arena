@@ -2,15 +2,15 @@ FROM node:20-slim
 
 WORKDIR /app
 
-# Install dependencies first for better layer caching
-COPY package.json package-lock.json* ./
-RUN npm ci --omit=dev=false
+# Install all dependencies (including dev for tsc)
+COPY package.json package-lock.json ./
+RUN npm install
 
 # Copy source and build
 COPY tsconfig.json ./
 COPY src/ ./src/
 COPY scripts/ ./scripts/
-RUN npm run build
+RUN npm run build && ls -la dist/ && ls -la dist/index.js
 
 # Remove dev deps to shrink image
 RUN npm prune --omit=dev
