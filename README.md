@@ -1,3 +1,13 @@
+---
+title: TxLINE Arena API
+emoji: 🏟️
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_file: Dockerfile
+pinned: false
+---
+
 # TxLINE Arena
 
 **Autonomous In-Play Trading Agent Platform on Solana**
