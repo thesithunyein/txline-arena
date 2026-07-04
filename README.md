@@ -124,12 +124,22 @@ TELEGRAM_CHANNEL_ID=
 # Generate a keypair
 solana-keygen new -o keypair.json
 
+# Fund it on devnet
+solana airdrop 2 <pubkey> --url devnet
+
 # Subscribe to TxLINE on-chain
 npm run subscribe
 
 # Activate your API token
 npm run activate
+
+# Anchor real settlement transactions on devnet (SPL Memo + SHA-256)
+npm run settle-onchain
 ```
+
+Set `SETTLEMENT_ONCHAIN=true` in `.env` to have the arena anchor every position
+settlement on Solana devnet automatically — each settled position gets a real,
+publicly verifiable transaction signature viewable on Solana Explorer.
 
 ### Running
 
@@ -233,6 +243,8 @@ txline-arena/
 │   │   └── circuitBreaker.ts
 │   ├── simulation/      # Synthetic data engine
 │   │   └── generator.ts
+│   ├── chain/           # On-chain settlement anchoring (SPL Memo)
+│   │   └── settlement.ts
 │   ├── db/              # Database (lowdb)
 │   │   ├── schema.ts
 │   │   └── database.ts
@@ -244,6 +256,7 @@ txline-arena/
 ├── scripts/             # Solana + backtest scripts
 │   ├── subscribe.ts
 │   ├── activate.ts
+│   ├── settle-onchain.ts
 │   └── backtest.ts
 ├── web/                 # Next.js dashboard
 │   ├── app/

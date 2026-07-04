@@ -43,10 +43,12 @@ and the Market-Maker agent extends toward the "In-Play Market Maker" idea.
   broken down by direction and confidence.
 - **Resilience for production** — SSE streams auto-reconnect with exponential backoff
   (`src/txline/stream.ts`); a `CircuitBreaker` pauses an agent after consecutive losses; a token-
-  bucket `rateLimiter` respects API limits; all writes persist to SQLite (`src/db/`).
+  bucket `rateLimiter` respects API limits; all writes persist to a JSON datastore via lowdb (`src/db/`).
 - **On-chain** — a real Solana **devnet** subscription transaction activates data access
-  (`scripts/subscribe.ts`), and the API token is activated with a wallet signature
-  (`src/txline/auth.ts`).
+  (`scripts/subscribe.ts`), the API token is activated with a wallet signature
+  (`src/txline/auth.ts`), and each settlement is **anchored on-chain** via the SPL Memo
+  program with a SHA-256 hash of the canonical payload (`src/chain/settlement.ts`) —
+  producing tamper-evident, publicly verifiable settlement records on Solana Explorer.
 - **Backtesting** — `src/backtest/` + `scripts/backtest.ts` replay historical odds through the
   same engine to evaluate strategies offline.
 - **Never-empty demo** — because the matches finish before judging, the dashboard falls back to a
@@ -94,7 +96,7 @@ TxLINE feed ──► OddsStream / ScoresStream (SSE, auto-reconnect)
         PredictionTracker (hit-rate)                   CircuitBreaker / Kelly sizing
                       │                                            │
                       ▼                                            ▼
-              SQLite persistence ◄───────────────  match end → stat-validation → settle
+              lowdb persistence ◄────────────  match end → stat-validation → settle → anchor on-chain
                       │
                       ▼
         Express REST + WebSocket  ──►  Next.js dashboard (live updates)
@@ -108,6 +110,7 @@ cp .env.example .env            # set TXLINE_API_TOKEN (or run npm run activate)
 npm install
 npm run subscribe               # real devnet subscription tx (optional, for live data)
 npm run activate                # activate API token via wallet signature
+npm run settle-onchain          # anchor real settlement txs on devnet (needs funded wallet)
 npm run dev                     # starts arena + API/WS on :3001
 
 # Frontend
@@ -116,6 +119,8 @@ cd web && npm install && npm run dev   # dashboard on :3000
 
 Set `LIVE_MODE=false` to run the built-in simulation engine, or
 `NEXT_PUBLIC_DEMO_MODE=true` on the frontend to force the deterministic replay dataset.
+Set `SETTLEMENT_ONCHAIN=true` (with a funded devnet keypair) to anchor every settlement
+on Solana as a real transaction.
 
 Tests: `npm test` (engine, agents, backtest).
 

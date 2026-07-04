@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Activity, BarChart3, Bot, Link2, Trophy, Zap } from 'lucide-react';
+import { Activity, BarChart3, Bot, Github, Link2, Trophy, Zap } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { fetchApi } from '../lib/api';
 
 const navItems = [
   { href: '/', label: 'Overview', icon: Activity },
@@ -19,16 +20,12 @@ export function Navbar() {
   const [mode, setMode] = useState<'live' | 'simulation' | null>(null);
 
   useEffect(() => {
-    fetch('/api/mode')
-      .then((r) => r.json())
-      .then((d) => setMode(d.mode))
-      .catch(() => setMode(null));
-    const interval = setInterval(() => {
-      fetch('/api/mode')
-        .then((r) => r.json())
+    const load = () =>
+      fetchApi<{ mode: 'live' | 'simulation' }>('/mode')
         .then((d) => setMode(d.mode))
-        .catch(() => {});
-    }, 15000);
+        .catch(() => setMode('simulation'));
+    load();
+    const interval = setInterval(load, 15000);
     return () => clearInterval(interval);
   }, []);
 
@@ -61,6 +58,15 @@ export function Navbar() {
 
         <div className="flex items-center gap-2">
           <ModeBadge mode={mode} />
+          <a
+            href="https://github.com/thesithunyein/txline-arena"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub repository"
+            className="hidden sm:flex h-8 w-8 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+          >
+            <Github className="h-4 w-4" />
+          </a>
         </div>
       </div>
 

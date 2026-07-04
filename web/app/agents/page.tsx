@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Bot, Pause } from 'lucide-react';
-import { fetchApi, AgentData, PositionData, LeaderboardEntry } from '../../lib/api';
+import { Bot, ExternalLink, Pause } from 'lucide-react';
+import { fetchApi, AgentData, PositionData, LeaderboardEntry, MatchData } from '../../lib/api';
 import { useWebSocket, ArenaEvent } from '../../lib/ws';
 import { formatPnl, formatPct } from '../../lib/utils';
 
@@ -10,19 +10,22 @@ export default function AgentsPage() {
   const [agents, setAgents] = useState<AgentData[]>([]);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [positions, setPositions] = useState<PositionData[]>([]);
+  const [matches, setMatches] = useState<MatchData[]>([]);
   const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
 
   useEffect(() => {
     async function load() {
       try {
-        const [a, lb, p] = await Promise.all([
+        const [a, lb, p, m] = await Promise.all([
           fetchApi<AgentData[]>('/agents').catch(() => []),
           fetchApi<LeaderboardEntry[]>('/leaderboard').catch(() => []),
           fetchApi<PositionData[]>('/positions').catch(() => []),
+          fetchApi<MatchData[]>('/matches').catch(() => []),
         ]);
         setAgents(a);
         setLeaderboard(lb);
         setPositions(p);
+        setMatches(m);
       } catch {}
     }
     load();
@@ -38,6 +41,10 @@ export default function AgentsPage() {
   });
 
   const agentPositions = selectedAgent ? positions.filter((p) => p.agentName === selectedAgent) : positions;
+  const matchName = (fixtureId: number) => {
+    const m = matches.find((x) => x.fixtureId === fixtureId);
+    return m ? `${m.home} vs ${m.away}` : `#${fixtureId}`;
+  };
 
   return (
     <div className="space-y-10">
@@ -103,19 +110,20 @@ export default function AgentsPage() {
             <thead>
               <tr className="border-b border-gray-100 text-left text-xs text-gray-500">
                 <th className="pb-3 pr-4 font-medium">Agent</th>
-                <th className="pb-3 pr-4 font-medium">Fixture</th>
+                <th className="pb-3 pr-4 font-medium">Match</th>
                 <th className="pb-3 pr-4 font-medium">Side</th>
                 <th className="pb-3 pr-4 text-right font-medium">Stake</th>
                 <th className="pb-3 pr-4 text-right font-medium">Odds</th>
                 <th className="pb-3 pr-4 font-medium">Status</th>
-                <th className="pb-3 text-right font-medium">P&L</th>
+                <th className="pb-3 pr-4 text-right font-medium">P&L</th>
+                <th className="pb-3 text-right font-medium">On-Chain</th>
               </tr>
             </thead>
             <tbody>
               {agentPositions.map((pos) => (
                 <tr key={pos.id} className="border-b border-gray-100 hover:bg-gray-50">
                   <td className="py-3 pr-4 text-gray-900 font-medium">{pos.agentName}</td>
-                  <td className="py-3 pr-4 text-gray-500 tabular-nums">#{pos.fixtureId}</td>
+                  <td className="py-3 pr-4 text-gray-600">{matchName(pos.fixtureId)}</td>
                   <td className="py-3 pr-4">
                     <span className="badge badge-blue capitalize">{pos.side}</span>
                   </td>
@@ -128,8 +136,23 @@ export default function AgentsPage() {
                       <span className="badge badge-gray">Settled</span>
                     )}
                   </td>
-                  <td className={`py-3 text-right font-semibold tabular-nums ${pos.pnl !== null ? (pos.pnl >= 0 ? 'text-emerald-600' : 'text-red-600') : 'text-gray-500'}`}>
+                  <td className={`py-3 pr-4 text-right font-semibold tabular-nums ${pos.pnl !== null ? (pos.pnl >= 0 ? 'text-emerald-600' : 'text-red-600') : 'text-gray-500'}`}>
                     {pos.pnl !== null ? formatPnl(pos.pnl) : '—'}
+                  </td>
+                  <td className="py-3 text-right">
+                    {pos.settlementTx ? (
+                      <a
+                        href={`https://explorer.solana.com/tx/${pos.settlementTx}?cluster=devnet`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 transition-colors font-mono text-xs"
+                      >
+                        {pos.settlementTx.slice(0, 6)}…
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                    ) : (
+                      <span className="text-xs text-gray-400">—</span>
+                    )}
                   </td>
                 </tr>
               ))}

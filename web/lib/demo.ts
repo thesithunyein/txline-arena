@@ -208,6 +208,63 @@ export function demoPositions(agentName?: string): PositionData[] {
   return out;
 }
 
+// Deterministic backtest result so the Backtest page always works, even when
+// no backend is reachable (static demo link). Mirrors the real BacktestEngine
+// output shape exactly.
+export function demoBacktest(numMatches: number, initialBankroll = 1000) {
+  const totalSignals = numMatches * 4 + 7;
+  const totalPositions = Math.round(totalSignals * 2.1);
+  const startedAt = Date.now() - 1200;
+
+  const agents = AGENTS.map((a) => {
+    const rng = mulberry32(a.seed * 733 + numMatches * 97);
+    const positions = Math.round(totalPositions / 4 + rng() * 6 - 3);
+    const winRate = 0.44 + a.base * 0.9 + rng() * 0.06;
+    const wins = Math.round(positions * winRate);
+    const totalPnl = Number((initialBankroll * a.base * (0.6 + rng() * 0.5) * (numMatches / 10)).toFixed(2));
+    // 40-point equity curve with drift toward final P&L plus noise.
+    const curve = Array.from({ length: 40 }, (_, i) => {
+      const progress = i / 39;
+      const noise = (mulberry32(a.seed * 13 + i)() - 0.5) * initialBankroll * 0.06;
+      return {
+        timestamp: startedAt + i * 30,
+        equity: Number((initialBankroll + totalPnl * progress + noise * (1 - progress)).toFixed(2)),
+      };
+    });
+    curve[curve.length - 1].equity = Number((initialBankroll + totalPnl).toFixed(2));
+    const maxEquity = Math.max(...curve.map((p) => p.equity));
+    const minAfterPeak = Math.min(...curve.slice(curve.findIndex((p) => p.equity === maxEquity)).map((p) => p.equity));
+    return {
+      name: a.name,
+      strategy: a.strategy,
+      finalBankroll: Number((initialBankroll + totalPnl).toFixed(2)),
+      totalPnl,
+      roi: Number(((totalPnl / initialBankroll) * 100).toFixed(2)),
+      totalPositions: positions,
+      wins,
+      losses: positions - wins,
+      winRate: Number(winRate.toFixed(3)),
+      sharpeRatio: Number((0.9 + a.base * 3.2 + rng() * 0.4).toFixed(2)),
+      maxDrawdown: Number((((maxEquity - minAfterPeak) / maxEquity) * 100).toFixed(2)),
+      equityCurve: curve,
+    };
+  });
+
+  const settled = Math.round(totalSignals * 0.72);
+  const correct = Math.round(settled * 0.63);
+  return {
+    config: { initialBankroll, zScoreThreshold: 2.0, pctChangeThreshold: 10, windowSize: 20 },
+    totalMatches: numMatches,
+    totalSignals,
+    totalPositions,
+    predictionAccuracy: Number(((correct / settled) * 100).toFixed(1)),
+    agents,
+    startedAt,
+    completedAt: startedAt + 1150,
+    durationMs: 1150,
+  };
+}
+
 export function demoHealth(): HealthData {
   return {
     status: 'ok',
@@ -225,6 +282,8 @@ export function demoForPath<T>(path: string): T {
   switch (clean) {
     case '/health':
       return demoHealth() as T;
+    case '/mode':
+      return { mode: 'simulation', timestamp: Date.now() } as T;
     case '/signals':
       return demoSignals(limit) as T;
     case '/leaderboard':

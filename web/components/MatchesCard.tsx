@@ -5,8 +5,8 @@ import { Activity } from 'lucide-react';
 
 export function MatchesCard({ matches }: { matches: MatchData[] }) {
   const live = matches.filter((m) => m.status === 'live' || m.status === 'inplay');
-  const upcoming = matches.filter((m) => m.status === 'notstarted' || m.status === 'pre');
   const finished = matches.filter((m) => m.status === 'finished' || m.status === 'ft');
+  const upcoming = matches.filter((m) => !live.includes(m) && !finished.includes(m));
 
   return (
     <div className="card">
