@@ -15,8 +15,10 @@ import { getFixtures } from './txline/client';
 import { setApiToken } from './txline/auth';
 import { SimulationEngine } from './simulation/generator';
 import { MatchInfo } from './txline/types';
+import { MatchRecord } from './db/schema';
 import { sendSignalAlert, sendPositionAlert, sendSettlementAlert, sendLeaderboardAlert, isTelegramEnabled } from './alerts/telegram';
 import { getDb, closeDb } from './db/database';
+import { seedIfEmpty } from './db/seed';
 
 const PORT = parseInt(process.env.PORT || '3001');
 const LIVE_MODE = process.env.LIVE_MODE !== 'false';
@@ -98,6 +100,7 @@ async function startLive(arena: ArenaManager): Promise<void> {
     const fixtures = await getFixtures();
     console.log(`Retrieved ${fixtures.length} fixtures from TxLINE`);
 
+    const matchRecords: MatchRecord[] = [];
     for (const fixture of fixtures) {
       const match: MatchInfo = {
         fixtureId: fixture.FixtureId,
@@ -111,7 +114,22 @@ async function startLive(arena: ArenaManager): Promise<void> {
         phase: 'PRE',
       };
       arena.updateMatchInfo(match);
+      matchRecords.push({
+        fixtureId: match.fixtureId,
+        home: match.home,
+        away: match.away,
+        competition: match.competition,
+        startTime: match.startTime,
+        status: match.status,
+        homeScore: 0,
+        awayScore: 0,
+        phase: match.phase,
+        lastUpdated: Date.now(),
+      });
     }
+
+    // Seed historical data if DB is empty so the dashboard looks alive
+    await seedIfEmpty(matchRecords);
   } catch (err) {
     console.error('Failed to fetch fixtures:', err);
     console.log('Falling back to SIMULATION mode...');
@@ -156,6 +174,20 @@ async function startSimulation(arena: ArenaManager): Promise<void> {
     simMatches.push(match);
     arena.updateMatchInfo(match);
   }
+
+  // Seed historical data if DB is empty
+  await seedIfEmpty(simMatches.map(m => ({
+    fixtureId: m.fixtureId,
+    home: m.home,
+    away: m.away,
+    competition: m.competition,
+    startTime: m.startTime,
+    status: m.status,
+    homeScore: m.homeScore,
+    awayScore: m.awayScore,
+    phase: m.phase,
+    lastUpdated: Date.now(),
+  })));
 
   const sim = new SimulationEngine({
     onOdds: (update) => arena.processOddsUpdate(update),

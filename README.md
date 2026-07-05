@@ -12,7 +12,14 @@ pinned: false
 
 **Autonomous In-Play Trading Agent Platform on Solana**
 
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://txline-arena.vercel.app/)
+[![Backend](https://img.shields.io/badge/backend-HF%20Space-blue)](https://thesithunyein-txline-arena-api.hf.space/health)
+[![License: MIT](https://img.shields.io/badge/license-MIT-purple)](LICENSE)
+
 TxLINE Arena is a multi-agent autonomous trading arena that ingests real-time TxLINE sports data feeds, detects sharp odds movements, and runs competing strategy agents. It activates data access with a real Solana devnet transaction and verifies every outcome against TxLINE's Solana-anchored feed before settling positions deterministically.
+
+**Live Dashboard**: https://txline-arena.vercel.app/
+**Backend API**: https://thesithunyein-txline-arena-api.hf.space/health
 
 ## Overview
 
@@ -257,7 +264,8 @@ txline-arena/
 │   │   └── settlement.ts
 │   ├── db/              # Database (lowdb)
 │   │   ├── schema.ts
-│   │   └── database.ts
+│   │   ├── database.ts
+│   │   └── seed.ts      # Historical data seeding for demo
 │   ├── alerts/          # Telegram notifications
 │   │   └── telegram.ts
 │   ├── server/          # REST API + WebSocket
@@ -298,19 +306,26 @@ txline-arena/
 3. Framework preset: Next.js
 4. Root directory: `web`
 5. Deploy — `vercel.json` handles API proxying to the backend
+6. **Live**: https://txline-arena.vercel.app/
 
-### Backend — Render.com (Free Tier)
+### Backend — Hugging Face Spaces (Docker)
 
-1. Create a new Web Service on [render.com](https://render.com)
-2. Connect your GitHub repo
-3. Build command: `npm install && npm run build`
-4. Start command: `npm start`
-5. Set environment variables from `.env.example`
-6. Set `LIVE_MODE=true` for live TxLINE data
+1. Create a new Space on [huggingface.co](https://huggingface.co/spaces)
+2. SDK: Docker
+3. Push the repo (including `Dockerfile`) to the Space
+4. Set Secrets in Space Settings: `TXLINE_API_TOKEN`, `LIVE_MODE=true`, `SOLANA_WALLET_KEYPAIR`, `SETTLEMENT_ONCHAIN=true`
+5. **Live**: https://thesithunyein-txline-arena-api.hf.space/health
 
 ### Environment Variables for Production
 
-Set all variables from `.env.example` in your Render dashboard. Set `LIVE_MODE=true` for live TxLINE data.
+| Variable | Description |
+|----------|-------------|
+| `TXLINE_API_TOKEN` | Activated TxLINE API token |
+| `LIVE_MODE` | `true` for live data, `false` for simulation |
+| `SOLANA_WALLET_KEYPAIR` | JSON array of keypair bytes (for on-chain settlement) |
+| `SETTLEMENT_ONCHAIN` | `true` to anchor settlements on Solana devnet |
+| `PORT` | Server port (default 3001) |
+| `AGENT_BANKROLL` | Starting bankroll per agent (default 1000) |
 
 ## Testing
 

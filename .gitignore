@@ -4,6 +4,7 @@ dist/
 keypair.json
 *.db
 *.sqlite
+txline_arena.json
 reports/
 .DS_Store
 Thumbs.db

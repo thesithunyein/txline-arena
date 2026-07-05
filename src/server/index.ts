@@ -3,7 +3,7 @@ import cors from 'cors';
 import http from 'http';
 import { WebSocketServer, WebSocket } from 'ws';
 import { ArenaManager, ArenaEvent } from '../arena/manager';
-import { getRecentSignals, getAgentPositions, getLeaderboard, getMatches, getAllPositions } from '../db/database';
+import { getRecentSignals, getAgentPositions, getLeaderboard as getDbLeaderboard, getMatches, getAllPositions } from '../db/database';
 import { BacktestEngine, generateSyntheticBacktestData } from '../backtest/engine';
 
 export class Server {
@@ -53,9 +53,28 @@ export class Server {
       res.json(await getRecentSignals(limit));
     });
 
-    this.app.get('/api/agents', (_req, res) => {
-      const agents = this.arena.getAgents().map((a) => a.getStats());
-      res.json(agents);
+    this.app.get('/api/agents', async (_req, res) => {
+      const inMemory = this.arena.getAgents().map((a) => a.getStats());
+      const dbAgents = await getDbLeaderboard();
+      const dbMap = new Map(dbAgents.map(a => [a.name, a]));
+      const merged = inMemory.map(stats => {
+        const db = dbMap.get(stats.name);
+        if (db) {
+          return {
+            ...stats,
+            bankroll: db.bankroll,
+            totalPnl: db.totalPnl,
+            totalPositions: db.totalPositions,
+            wins: db.wins,
+            losses: db.losses,
+            winRate: db.totalPositions > 0 ? db.wins / db.totalPositions : 0,
+            roi: db.bankroll > 0 ? (db.totalPnl / (db.bankroll - db.totalPnl)) * 100 : 0,
+            paused: db.paused,
+          };
+        }
+        return stats;
+      });
+      res.json(merged);
     });
 
     this.app.get('/api/agents/:name/positions', async (req, res) => {
@@ -67,8 +86,28 @@ export class Server {
       res.json(await getAllPositions());
     });
 
-    this.app.get('/api/leaderboard', (_req, res) => {
-      res.json(this.arena.getLeaderboard().getRankings());
+    this.app.get('/api/leaderboard', async (_req, res) => {
+      const inMemory = this.arena.getLeaderboard().getRankings();
+      const dbAgents = await getDbLeaderboard();
+      const dbMap = new Map(dbAgents.map(a => [a.name, a]));
+      const merged = inMemory.map(entry => {
+        const db = dbMap.get(entry.name);
+        if (db) {
+          return {
+            ...entry,
+            bankroll: db.bankroll,
+            totalPnl: db.totalPnl,
+            totalPositions: db.totalPositions,
+            winRate: db.totalPositions > 0 ? db.wins / db.totalPositions : 0,
+            roi: db.bankroll > 0 ? (db.totalPnl / (db.bankroll - db.totalPnl)) * 100 : 0,
+            paused: db.paused,
+          };
+        }
+        return entry;
+      });
+      merged.sort((a, b) => b.totalPnl - a.totalPnl);
+      merged.forEach((e, i) => { e.rank = i + 1; });
+      res.json(merged);
     });
 
     this.app.get('/api/matches', async (_req, res) => {
