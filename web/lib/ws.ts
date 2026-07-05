@@ -3,7 +3,11 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { demoLiveSignal } from './demo';
 
-const WS_URL = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3001/ws';
+const WS_URL =
+  process.env.NEXT_PUBLIC_WS_URL ||
+  (typeof window !== 'undefined' && window.location.hostname !== 'localhost'
+    ? 'wss://thesithunyein-txline-arena-api.hf.space/ws'
+    : 'ws://localhost:3001/ws');
 const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
 // How long to wait for a real socket before falling back to simulated events.
 const SIM_FALLBACK_MS = 3500;

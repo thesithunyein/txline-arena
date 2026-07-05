@@ -4,10 +4,10 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || '/api';
 // Force the deterministic replay dataset (useful for the public demo link / video).
 const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
 
-// Fail fast if the backend is unreachable or cold-starting (e.g. Render free
-// tier can take 50s+ to spin up) so the dashboard falls back to replay data
-// within a couple of seconds instead of sitting empty.
-const FETCH_TIMEOUT_MS = 2500;
+// Fail fast if the backend is unreachable so the dashboard falls back to
+// replay data instead of sitting empty. Generous enough for cross-region
+// round-trips to the Hugging Face Space.
+const FETCH_TIMEOUT_MS = 8000;
 
 export async function fetchApi<T>(path: string): Promise<T> {
   if (DEMO_MODE) return demoForPath<T>(path);
