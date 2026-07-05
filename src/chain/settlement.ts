@@ -24,9 +24,16 @@ let walletResolved = false;
 function getWallet(): Keypair | null {
   if (walletResolved) return wallet;
   walletResolved = true;
-  const keypairPath = process.env.SOLANA_WALLET_KEYPAIR_PATH;
-  if (!keypairPath || !fs.existsSync(keypairPath)) return null;
   try {
+    // Containerized deployments: keypair JSON array passed directly via env.
+    const inlineKeypair = process.env.SOLANA_WALLET_KEYPAIR;
+    if (inlineKeypair) {
+      const secret = Uint8Array.from(JSON.parse(inlineKeypair));
+      wallet = Keypair.fromSecretKey(secret);
+      return wallet;
+    }
+    const keypairPath = process.env.SOLANA_WALLET_KEYPAIR_PATH;
+    if (!keypairPath || !fs.existsSync(keypairPath)) return null;
     const secret = Uint8Array.from(JSON.parse(fs.readFileSync(keypairPath, 'utf-8')));
     wallet = Keypair.fromSecretKey(secret);
   } catch {
