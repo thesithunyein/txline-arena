@@ -231,7 +231,7 @@ export function demoPositions(agentName?: string): PositionData[] {
         openedAt: Date.now() - (i + 1) * 600000,
         settledAt: settled ? Date.now() - i * 300000 : null,
         pnl,
-        txSignature: settled ? REAL_TXS[txIdx++ % REAL_TXS.length] : null,
+        txSignature: settled ? REAL_TXS[txIdx % REAL_TXS.length] : null,
         settlementTx: settled ? REAL_TXS[txIdx++ % REAL_TXS.length] : null,
       });
     }
