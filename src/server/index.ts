@@ -113,7 +113,7 @@ function computeAttribution(positions: any[], signals: any[]): any {
   // Round pnl values
   for (const a of Object.values(agents)) {
     a.totalPnl = Number(a.totalPnl.toFixed(2));
-    for (const m of Object.values(a.byMarket)) m.pnl = Number(m.pnl.toFixed(2));
+    for (const m of Object.values(a.byMarket) as any[]) m.pnl = Number(m.pnl.toFixed(2));
     for (const k of Object.keys(a.byZScoreRange)) a.byZScoreRange[k].pnl = Number(a.byZScoreRange[k].pnl.toFixed(2));
     for (const k of Object.keys(a.byDirection)) a.byDirection[k].pnl = Number(a.byDirection[k].pnl.toFixed(2));
     for (const k of Object.keys(a.byConfidence)) a.byConfidence[k].pnl = Number(a.byConfidence[k].pnl.toFixed(2));
