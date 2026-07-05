@@ -92,8 +92,14 @@ export function demoSignal(index: number, bucket: number): SignalData {
   const isPending = rng() < 0.3;
   const hitProbability = Math.min(0.92, 0.4 + confidence * 0.4 + Math.min(zScore, 4) * 0.04);
   const predicted = isPending ? null : rng() < hitProbability;
+  const hexId = (seed: number) => {
+    const r = mulberry32(seed);
+    let s = '';
+    for (let i = 0; i < 12; i++) s += '0123456789abcdef'[Math.floor(r() * 16)];
+    return `sig_${s}`;
+  };
   return {
-    id: `sig-${bucket}-${index}`,
+    id: hexId(bucket * 100 + index),
     fixtureId: match.fixtureId,
     match: `${match.home} vs ${match.away}`,
     market: MARKETS[index % MARKETS.length],
@@ -197,8 +203,14 @@ export function demoPositions(agentName?: string): PositionData[] {
       const pnl = settled ? Number(((rng() > 0.45 ? 1 : -1) * stake * (odds - 1) * rng()).toFixed(2)) : null;
       const m = matches[(ai + i) % matches.length];
       const seed = ai * 1000 + i * 37 + 7;
+      const posHexId = (seed: number) => {
+        const r = mulberry32(seed * 7 + 13);
+        let s = '';
+        for (let j = 0; j < 12; j++) s += '0123456789abcdef'[Math.floor(r() * 16)];
+        return `pos_${s}`;
+      };
       out.push({
-        id: `pos-${name}-${i}`,
+        id: posHexId(ai * 100 + i),
         agentName: name,
         fixtureId: m.fixtureId,
         side: rng() > 0.5 ? 'back' : 'lay',

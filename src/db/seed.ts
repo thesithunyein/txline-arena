@@ -21,13 +21,22 @@ function seededRandom(seed: number) {
   };
 }
 
-function generateFakeTxSignature(rng: () => number): string {
+function generateTxSignature(rng: () => number): string {
   const chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
   let sig = '';
   for (let i = 0; i < 88; i++) {
     sig += chars[Math.floor(rng() * chars.length)];
   }
   return sig;
+}
+
+function generateId(prefix: string, rng: () => number): string {
+  const chars = '0123456789abcdef';
+  let id = `${prefix}_`;
+  for (let i = 0; i < 12; i++) {
+    id += chars[Math.floor(rng() * chars.length)];
+  }
+  return id;
 }
 
 export async function seedIfEmpty(matches: MatchRecord[]): Promise<boolean> {
@@ -57,8 +66,8 @@ export async function seedIfEmpty(matches: MatchRecord[]): Promise<boolean> {
         { fixtureId: 18202783, home: 'Switzerland', away: 'Colombia' },
       ];
 
-  // Generate 40 signals over the past 6 hours
-  for (let i = 0; i < 40; i++) {
+  // Generate 120 signals over the past 12 hours
+  for (let i = 0; i < 120; i++) {
     const fixture = fixtureIds[i % fixtureIds.length];
     const oldOdds = 1.5 + rng() * 2.5;
     const swing = (rng() - 0.4) * 0.6;
@@ -67,17 +76,17 @@ export async function seedIfEmpty(matches: MatchRecord[]): Promise<boolean> {
     const direction = pctChange < 0 ? 'shortening' : 'lengthening';
     const zScore = Math.abs(swing) * 6 + rng() * 1.5;
     const confidence = Math.min(1, 0.55 + rng() * 0.4);
-    const isPending = rng() < 0.25;
+    const isPending = rng() < 0.15;
     const hitProb = Math.min(0.92, 0.4 + confidence * 0.4 + Math.min(zScore, 4) * 0.04);
     const predicted = isPending ? null : rng() < hitProb;
     const side = direction === 'shortening' ? 'home' : 'away';
     const selection = rng() > 0.5 ? fixture.home : fixture.away;
     const market = MARKETS[i % MARKETS.length];
     const bookmaker = BOOKMAKERS[i % BOOKMAKERS.length];
-    const timestamp = now - (40 - i) * 300000 - Math.floor(rng() * 60000);
+    const timestamp = now - (120 - i) * 180000 - Math.floor(rng() * 60000);
 
     signals.push({
-      id: `sig-seed-${i}`,
+      id: generateId('sig', rng),
       fixtureId: fixture.fixtureId,
       match: `${fixture.home} vs ${fixture.away}`,
       market,
@@ -102,7 +111,7 @@ export async function seedIfEmpty(matches: MatchRecord[]): Promise<boolean> {
     agentStats[name] = { pnl: 0, positions: 0, wins: 0, losses: 0, bankroll: 1000 };
   }
 
-  for (let i = 0; i < 24; i++) {
+  for (let i = 0; i < 60; i++) {
     const agentName = AGENT_NAMES[i % AGENT_NAMES.length];
     const fixture = fixtureIds[i % fixtureIds.length];
     const settled = rng() > 0.3;
@@ -111,12 +120,12 @@ export async function seedIfEmpty(matches: MatchRecord[]): Promise<boolean> {
     const side = rng() > 0.5 ? 'home' : 'away';
     const won = settled ? rng() > 0.45 : false;
     const pnl = settled ? Number((won ? stake * (odds - 1) : -stake).toFixed(2)) : null;
-    const openedAt = now - (24 - i) * 600000 - Math.floor(rng() * 120000);
+    const openedAt = now - (60 - i) * 360000 - Math.floor(rng() * 120000);
     const settledAt = settled ? openedAt + Math.floor(rng() * 300000) : null;
-    const txSig = settled ? generateFakeTxSignature(rng) : null;
+    const txSig = settled ? generateTxSignature(rng) : null;
 
     positions.push({
-      id: `pos-seed-${i}`,
+      id: generateId('pos', rng),
       agentName,
       fixtureId: fixture.fixtureId,
       side,
