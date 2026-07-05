@@ -22,6 +22,8 @@ ENV NODE_ENV=production
 ENV TXLINE_BASE_URL=https://txline.txodds.com
 ENV SOLANA_RPC_URL=https://api.devnet.solana.com
 ENV DB_PATH=/tmp/txline_arena.json
+ENV SOLANA_WALLET_KEYPAIR_PATH=/app/keypair.json
+ENV SETTLEMENT_ONCHAIN=true
 
 EXPOSE 7860
 
