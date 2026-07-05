@@ -3,6 +3,7 @@
 import { SignalData } from '../lib/api';
 import { formatPct } from '../lib/utils';
 import { Zap, TrendingDown, TrendingUp } from 'lucide-react';
+import { getFlag } from '../lib/flags';
 
 export function LiveSignalsCard({ signals }: { signals: SignalData[] }) {
   return (
@@ -36,7 +37,14 @@ export function LiveSignalsCard({ signals }: { signals: SignalData[] }) {
                   )}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">{signal.match}</p>
+                  <p className="text-sm font-medium text-gray-900 truncate">
+                    {signal.match.split(' vs ').map((team, i, arr) => (
+                      <span key={i}>
+                        {i > 0 && <span className="text-gray-400 font-normal"> vs </span>}
+                        <span className="mr-1">{getFlag(team)}</span>{team}
+                      </span>
+                    ))}
+                  </p>
                   <p className="text-xs text-gray-500">
                     {signal.selection} · {signal.bookmaker} · z={signal.zScore.toFixed(2)}
                   </p>

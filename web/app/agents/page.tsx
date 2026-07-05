@@ -1,10 +1,25 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Bot, Pause } from 'lucide-react';
+import { Bot, Pause, TrendingUp, TrendingDown, DollarSign, Repeat } from 'lucide-react';
 import { fetchApi, AgentData, PositionData, LeaderboardEntry, MatchData } from '../../lib/api';
 import { useWebSocket, ArenaEvent } from '../../lib/ws';
 import { formatPnl, formatPct } from '../../lib/utils';
+import { getFlag } from '../../lib/flags';
+
+const AGENT_ICONS: Record<string, any> = {
+  Momentum: TrendingUp,
+  'Mean Reversion': TrendingDown,
+  Value: DollarSign,
+  'Market Maker': Repeat,
+};
+
+const AGENT_COLORS: Record<string, string> = {
+  Momentum: 'bg-emerald-100 text-emerald-600',
+  'Mean Reversion': 'bg-red-100 text-red-600',
+  Value: 'bg-blue-100 text-blue-600',
+  'Market Maker': 'bg-violet-100 text-violet-600',
+};
 
 export default function AgentsPage() {
   const [agents, setAgents] = useState<AgentData[]>([]);
@@ -43,7 +58,12 @@ export default function AgentsPage() {
   const agentPositions = selectedAgent ? positions.filter((p) => p.agentName === selectedAgent) : positions;
   const matchName = (fixtureId: number) => {
     const m = matches.find((x) => x.fixtureId === fixtureId);
-    return m ? `${m.home} vs ${m.away}` : `#${fixtureId}`;
+    if (m) {
+      const hf = getFlag(m.home);
+      const af = getFlag(m.away);
+      return `${hf} ${m.home} vs ${af} ${m.away}`;
+    }
+    return `#${fixtureId}`;
   };
 
   return (
@@ -64,8 +84,11 @@ export default function AgentsPage() {
           >
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
-                  <Bot className="h-5 w-5 text-gray-700" />
+                <div className={`flex h-10 w-10 items-center justify-center rounded-full ${AGENT_COLORS[agent.name] || 'bg-gray-100 text-gray-700'}`}>
+                  {(() => {
+                    const Icon = AGENT_ICONS[agent.name] || Bot;
+                    return <Icon className="h-5 w-5" />;
+                  })()}
                 </div>
                 <span className="font-semibold text-gray-900 text-sm">{agent.name}</span>
               </div>

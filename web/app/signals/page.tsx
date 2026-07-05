@@ -5,6 +5,7 @@ import { Zap, TrendingDown, TrendingUp, CheckCircle, XCircle } from 'lucide-reac
 import { fetchApi, SignalData } from '../../lib/api';
 import { useWebSocket, ArenaEvent } from '../../lib/ws';
 import { formatTime, formatPct } from '../../lib/utils';
+import { getFlag } from '../../lib/flags';
 
 export default function SignalsPage() {
   const [signals, setSignals] = useState<SignalData[]>([]);
@@ -85,7 +86,14 @@ export default function SignalsPage() {
               {filtered.map((signal) => (
                 <tr key={signal.id} className="border-b border-gray-100 hover:bg-gray-50">
                   <td className="py-3 pr-4 text-gray-500">{formatTime(signal.timestamp)}</td>
-                  <td className="py-3 pr-4 text-gray-900 font-medium">{signal.match}</td>
+                  <td className="py-3 pr-4 text-gray-900 font-medium">
+                    {signal.match.split(' vs ').map((team, i) => (
+                      <span key={i}>
+                        {i > 0 && <span className="text-gray-400 font-normal"> vs </span>}
+                        <span className="mr-1">{getFlag(team)}</span>{team}
+                      </span>
+                    ))}
+                  </td>
                   <td className="py-3 pr-4 text-gray-600">{signal.selection}</td>
                   <td className="py-3 pr-4">
                     {signal.direction === 'shortening' ? (

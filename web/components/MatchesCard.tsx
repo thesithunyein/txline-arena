@@ -2,6 +2,7 @@
 
 import { MatchData } from '../lib/api';
 import { Activity } from 'lucide-react';
+import { getMatchFlags } from '../lib/flags';
 
 export function MatchesCard({ matches }: { matches: MatchData[] }) {
   const live = matches.filter((m) => m.status === 'live' || m.status === 'inplay');
@@ -68,14 +69,19 @@ export function MatchesCard({ matches }: { matches: MatchData[] }) {
 function MatchRow({ match }: { match: MatchData }) {
   const isLive = match.status === 'live' || match.status === 'inplay';
   const isFinished = match.status === 'finished' || match.status === 'ft';
+  const flags = getMatchFlags(match.home, match.away);
 
   return (
     <div className="flex items-center justify-between rounded-xl bg-gray-50 border border-gray-100 px-4 py-3 transition-all hover:bg-gray-100">
       <div className="flex items-center gap-3 min-w-0">
         {isLive && <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />}
-        <div className="min-w-0">
-          <p className="text-sm font-medium text-gray-900 truncate">{match.home} vs {match.away}</p>
-          <p className="text-xs text-gray-500 truncate">{match.competition}</p>
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="text-lg leading-none flex-shrink-0">{flags.home}</span>
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-gray-900 truncate">{match.home} <span className="text-gray-400 font-normal">vs</span> {match.away}</p>
+            <p className="text-xs text-gray-500 truncate">{match.competition}</p>
+          </div>
+          <span className="text-lg leading-none flex-shrink-0">{flags.away}</span>
         </div>
       </div>
       <div className="text-right flex-shrink-0">

@@ -49,29 +49,37 @@ export default function OverviewPage() {
 
   return (
     <div className="space-y-10">
-      <div className="text-center py-6 sm:py-10">
-        <h1 className="page-header mb-4 text-balance">
-          Autonomous trading on{' '}
-          <span className="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
-            real-time sports data
-          </span>
-          .
-        </h1>
-        <p className="text-base sm:text-lg text-gray-500 max-w-2xl mx-auto text-balance">
-          Multi-agent arena that detects sharp odds movements, opens positions, and settles on Solana — all from one dashboard.
-        </p>
-        <div className="flex items-center justify-center gap-2 mt-6">
-          {health ? (
-            <span className={`badge ${health.mode === 'live' ? 'badge-green' : 'badge-yellow'}`}>
-              <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ backgroundColor: health.mode === 'live' ? '#10b981' : '#f59e0b' }} />
-              {health.mode === 'live' ? 'LIVE DATA' : 'SIMULATION MODE'}
+      <div className="relative text-center py-8 sm:py-12 overflow-hidden rounded-3xl">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50" />
+        <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(16,185,129,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(6,182,212,0.1) 0%, transparent 50%)' }} />
+        <div className="relative px-4">
+          <h1 className="page-header mb-4 text-balance">
+            Autonomous trading on{' '}
+            <span className="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
+              real-time sports data
             </span>
-          ) : (
-            <span className="badge badge-gray">
-              <span className="h-1.5 w-1.5 rounded-full bg-gray-500" />
-              Connecting...
+            .
+          </h1>
+          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto text-balance">
+            Multi-agent arena that detects sharp odds movements, opens positions, and settles on Solana — all from one dashboard.
+          </p>
+          <div className="flex items-center justify-center gap-2 mt-6">
+            {health ? (
+              <span className={`badge ${health.mode === 'live' ? 'badge-green' : 'badge-yellow'}`}>
+                <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ backgroundColor: health.mode === 'live' ? '#10b981' : '#f59e0b' }} />
+                {health.mode === 'live' ? 'LIVE DATA' : 'SIMULATION MODE'}
+              </span>
+            ) : (
+              <span className="badge badge-gray">
+                <span className="h-1.5 w-1.5 rounded-full bg-gray-500" />
+                Connecting...
+              </span>
+            )}
+            <span className="badge badge-blue">
+              <span className="h-1.5 w-1.5 rounded-full bg-gray-900" />
+              Solana Devnet
             </span>
-          )}
+          </div>
         </div>
       </div>
 
