@@ -49,9 +49,15 @@ export default function OverviewPage() {
 
   return (
     <div className="space-y-10">
-      <div className="text-center py-8">
-        <h1 className="page-header mb-4">Autonomous trading on real-time sports data.</h1>
-        <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+      <div className="text-center py-6 sm:py-10">
+        <h1 className="page-header mb-4 text-balance">
+          Autonomous trading on{' '}
+          <span className="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
+            real-time sports data
+          </span>
+          .
+        </h1>
+        <p className="text-base sm:text-lg text-gray-500 max-w-2xl mx-auto text-balance">
           Multi-agent arena that detects sharp odds movements, opens positions, and settles on Solana — all from one dashboard.
         </p>
         <div className="flex items-center justify-center gap-2 mt-6">
@@ -69,11 +75,11 @@ export default function OverviewPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatCard icon={Trophy} label="Total P&L" value={formatPnl(totalPnl)} positive={totalPnl >= 0} />
-        <StatCard icon={Bot} label="Active Agents" value={String(leaderboard.length)} />
-        <StatCard icon={Zap} label="Signals Detected" value={String(totalSignals)} />
-        <StatCard icon={Activity} label="Live Matches" value={String(liveMatches.length)} />
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+        <StatCard icon={Trophy} label="Total P&L" value={formatPnl(totalPnl)} positive={totalPnl >= 0} delay={0} />
+        <StatCard icon={Bot} label="Active Agents" value={String(leaderboard.length)} delay={75} />
+        <StatCard icon={Zap} label="Signals Detected" value={String(totalSignals)} delay={150} />
+        <StatCard icon={Activity} label="Live Matches" value={String(liveMatches.length)} delay={225} />
       </div>
 
       <PredictionAccuracyCard signals={signals} />
@@ -91,14 +97,15 @@ export default function OverviewPage() {
   );
 }
 
-function StatCard({ icon: Icon, label, value, positive }: {
+function StatCard({ icon: Icon, label, value, positive, delay = 0 }: {
   icon: any;
   label: string;
   value: string;
   positive?: boolean;
+  delay?: number;
 }) {
   return (
-    <div className="card card-hover animate-slide-up">
+    <div className="card card-hover animate-slide-up" style={{ animationDelay: `${delay}ms`, animationFillMode: 'backwards' }}>
       <div className="flex items-center justify-between mb-4">
         <span className="stat-label">{label}</span>
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100">
