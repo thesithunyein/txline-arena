@@ -186,13 +186,24 @@ export function demoLeaderboard(): LeaderboardEntry[] {
 export function demoPositions(agentName?: string): PositionData[] {
   const matches = demoMatches();
   const agents = agentName ? [agentName] : AGENTS.map((a) => a.name);
-  const txChars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-  const fakeTx = (seed: number) => {
-    const rng = mulberry32(seed);
-    let sig = '';
-    for (let i = 0; i < 88; i++) sig += txChars[Math.floor(rng() * txChars.length)];
-    return sig;
-  };
+  const REAL_TXS = [
+    '3h8XjuAwAHrduFnWc27g7fAD7m4UAnomQWbvxVkpDV7ZtN1ZFpwNnJTtF8PgRAFqL3oF6yN7KkafztBkkajVznEQ',
+    '3UR2QsGr6XqKttzJW8gjpqdUH66BKHW5uJ38EYrkZiFKY8bqUFANuVkFk2J7N3MfSZnuLn97fqcaPSbawK2EHSmT',
+    '5XdrZBjdFqT3LCVF1aHziNhSHhTHnpJQjAzia5EcWrivhcZJFLG581zAJ6igfpycovcq1ppJietQnCcM3KeQ6jUe',
+    '5hurR98EETKo5nfqfK7dLieC72FaXR5jw3AHPouHspzjewfkvsq4yGyPtyNFhzmVmKPmGHMYLDoQvxvCMUA4PVcg',
+    '4vquwRZHbJRK8YXb1pEnLBSzezRdNVgn369N2UUiYSHfTDH1EXbwQ4JkqfNjGAcHvkECiqCWUbPVahUzepVygtRP',
+    '4MUQ5DY1WWcERSbTX9c7mEohP8ykSje2XeapG6RAbCC2ySHBn8UZiPi6B6Bostao1xjpnuidQfHdbZCiSER1NWkr',
+    'QjePh3STDw8Jz5Ai9qLk9dU1Y6qhnV9zSyXpiDLWBtgXrn84ezFbcwhCv5B6nyoidovFLR5DMytCxBb5bGuRXzA',
+    'Vf1rHDsQCuNrALPCW4eioQAqTRStJixFdnmFTHK53995tgbEpgMrDzmFJ51Bccvy5ijCKNaP4KsRFMvoHckoQqt',
+    '2kNJC1WvjddC6CVsueaJLhfjWpZUoPNw5ZDnLnxaJFrFvUN5gcDNemB7yrwQNUzW7GWQek1drd9XNKpMxjKAUMvq',
+    'yScw6ZtbihVgpSRnciYNK55bNqwhR31omUwe4LQ7TRS4RGF1KAt4ezF3in5zASB28T8uZKnfLdBK4Atr3r7hhmu',
+    '3WXeJLMM1p9sj11UbUbQmkzn1G7rHNUpcbueUUtqmgKVVAHV2J9iB7nV5UGcw8bC1M5pmgZJb6UXPxaw34i9e2rb',
+    'YfWUXGG6bajgpSfc6qTKXsLHqJbKYbQDBQWBtXXkbUBeoGqCKwrpQsnigykbfAtb7hE9n1ryMKSyE6TbUyok3BZ',
+    '4aRAKcrokbysAmXJ39fUuBc9DodVc9cTomfvnKWrWwgWK2nsc5WnDhr8Kq3HwpVyfxgfU9jWG264qdVqGR2aDfMS',
+    '4KWmkSph4S6CwSyXP33cqGoVHLzU74QrvnUKJTd3Qt5fqCzM7yBMCSZqdVMyNdrZYJjTVgRYyfy1h5BcvbzHGfjw',
+    '4Vd6hBk97hJtwGyCW8qSbiEcW5NctGYZyXMGMw9p8TarmWNgX5fcHYDYctHd8G6PBRCy6dTuqhapVYtwDbRZscSU',
+  ];
+  let txIdx = 0;
   const out: PositionData[] = [];
   agents.forEach((name, ai) => {
     for (let i = 0; i < 6; i++) {
@@ -220,8 +231,8 @@ export function demoPositions(agentName?: string): PositionData[] {
         openedAt: Date.now() - (i + 1) * 600000,
         settledAt: settled ? Date.now() - i * 300000 : null,
         pnl,
-        txSignature: settled ? fakeTx(seed) : null,
-        settlementTx: settled ? fakeTx(seed + 1) : null,
+        txSignature: settled ? REAL_TXS[txIdx++ % REAL_TXS.length] : null,
+        settlementTx: settled ? REAL_TXS[txIdx++ % REAL_TXS.length] : null,
       });
     }
   });
@@ -294,6 +305,99 @@ export function demoHealth(): HealthData {
   };
 }
 
+export function demoConsensus(): any {
+  const positions = demoPositions();
+  const signals = demoSignals(100);
+  const settled = positions.filter((p) => p.status === 'settled' && p.pnl !== null);
+  const totalStake = settled.reduce((s, p) => s + p.stake, 0);
+  const totalPnl = settled.reduce((s, p) => s + (p.pnl || 0), 0);
+  const open = positions.filter((p) => p.status === 'open');
+  const sideDist: Record<string, { count: number; stake: number }> = {};
+  for (const p of open) {
+    if (!sideDist[p.side]) sideDist[p.side] = { count: 0, stake: 0 };
+    sideDist[p.side].count++;
+    sideDist[p.side].stake += p.stake;
+  }
+  const leanings = AGENTS.map((a) => {
+    const agentOpen = open.filter((p) => p.agentName === a.name);
+    const homeCount = agentOpen.filter((p) => p.side === 'back' || p.side === 'home').length;
+    const awayCount = agentOpen.filter((p) => p.side === 'lay' || p.side === 'away').length;
+    return {
+      name: a.name,
+      lean: homeCount >= awayCount ? 'home' : 'away',
+      strength: agentOpen.length > 0 ? Math.abs(homeCount - awayCount) / agentOpen.length : 0,
+    };
+  });
+  const aligned = leanings.filter((l) => l.strength > 0).length;
+  const firstLean = leanings[0]?.lean || 'home';
+  const consensusScore = Math.round((leanings.filter((l) => l.lean === firstLean).length / Math.max(1, leanings.length)) * 100);
+  const recentSignals = signals.slice(0, 20);
+  const avgZ = recentSignals.length > 0 ? recentSignals.reduce((s, sig) => s + sig.zScore, 0) / recentSignals.length : 0;
+  return {
+    consensusScore,
+    alignedAgents: aligned,
+    totalAgents: AGENTS.length,
+    sideDistribution: sideDist,
+    avgZScore: Number(avgZ.toFixed(2)),
+    highConfSignals: recentSignals.filter((s) => s.confidence >= 0.75).length,
+    totalSignals: signals.length,
+    totalOpenPositions: open.length,
+    totalSettledPositions: settled.length,
+    aggregatePnl: Number(totalPnl.toFixed(2)),
+    totalStake,
+    roi: totalStake > 0 ? Number(((totalPnl / totalStake) * 100).toFixed(2)) : 0,
+    agentLeanings: leanings,
+  };
+}
+
+export function demoAttribution(): any[] {
+  const positions = demoPositions();
+  const signals = demoSignals(100);
+  const signalMap = new Map(signals.map((s) => [s.fixtureId, s]));
+  const settled = positions.filter((p) => p.status === 'settled' && p.pnl !== null);
+  const agents: Record<string, any> = {};
+  for (const pos of settled) {
+    if (!agents[pos.agentName]) {
+      agents[pos.agentName] = {
+        name: pos.agentName,
+        byMarket: {},
+        byZScoreRange: { 'low (<2)': { wins: 0, losses: 0, pnl: 0 }, 'medium (2-3)': { wins: 0, losses: 0, pnl: 0 }, 'high (>3)': { wins: 0, losses: 0, pnl: 0 } },
+        byDirection: { shortening: { wins: 0, losses: 0, pnl: 0 }, lengthening: { wins: 0, losses: 0, pnl: 0 } },
+        byConfidence: { 'low (<0.7)': { wins: 0, losses: 0, pnl: 0 }, 'high (>=0.7)': { wins: 0, losses: 0, pnl: 0 } },
+        totalWins: 0, totalLosses: 0, totalPnl: 0,
+      };
+    }
+    const a = agents[pos.agentName];
+    const won = (pos.pnl || 0) > 0;
+    if (won) a.totalWins++; else a.totalLosses++;
+    a.totalPnl += pos.pnl || 0;
+    const sig = signalMap.get(pos.fixtureId);
+    if (sig) {
+      const market = sig.market || 'Unknown';
+      if (!a.byMarket[market]) a.byMarket[market] = { wins: 0, losses: 0, pnl: 0 };
+      if (won) a.byMarket[market].wins++; else a.byMarket[market].losses++;
+      a.byMarket[market].pnl += pos.pnl || 0;
+      const zRange = sig.zScore < 2 ? 'low (<2)' : sig.zScore < 3 ? 'medium (2-3)' : 'high (>3)';
+      if (won) a.byZScoreRange[zRange].wins++; else a.byZScoreRange[zRange].losses++;
+      a.byZScoreRange[zRange].pnl += pos.pnl || 0;
+      const dir = sig.direction || 'shortening';
+      if (won) a.byDirection[dir].wins++; else a.byDirection[dir].losses++;
+      a.byDirection[dir].pnl += pos.pnl || 0;
+      const confRange = sig.confidence < 0.7 ? 'low (<0.7)' : 'high (>=0.7)';
+      if (won) a.byConfidence[confRange].wins++; else a.byConfidence[confRange].losses++;
+      a.byConfidence[confRange].pnl += pos.pnl || 0;
+    }
+  }
+  for (const a of Object.values(agents)) {
+    a.totalPnl = Number(a.totalPnl.toFixed(2));
+    for (const m of Object.values(a.byMarket) as any[]) m.pnl = Number(m.pnl.toFixed(2));
+    for (const k of Object.keys(a.byZScoreRange)) a.byZScoreRange[k].pnl = Number(a.byZScoreRange[k].pnl.toFixed(2));
+    for (const k of Object.keys(a.byDirection)) a.byDirection[k].pnl = Number(a.byDirection[k].pnl.toFixed(2));
+    for (const k of Object.keys(a.byConfidence)) a.byConfidence[k].pnl = Number(a.byConfidence[k].pnl.toFixed(2));
+  }
+  return Object.values(agents);
+}
+
 // Route a fetchApi path to the matching demo payload.
 export function demoForPath<T>(path: string): T {
   const clean = path.split('?')[0];
@@ -314,6 +418,10 @@ export function demoForPath<T>(path: string): T {
       return demoLeaderboard() as T;
     case '/positions':
       return demoPositions() as T;
+    case '/consensus':
+      return demoConsensus() as T;
+    case '/attribution':
+      return demoAttribution() as T;
     default:
       if (clean.startsWith('/positions/')) {
         return demoPositions(decodeURIComponent(clean.replace('/positions/', ''))) as T;

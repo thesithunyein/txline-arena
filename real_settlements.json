@@ -1,0 +1,152 @@
+[
+  {
+    "posIdx": 0,
+    "agentName": "Momentum",
+    "fixtureId": 18187298,
+    "side": "home",
+    "won": false,
+    "pnl": -20,
+    "txSignature": "3h8XjuAwAHrduFnWc27g7fAD7m4UAnomQWbvxVkpDV7ZtN1ZFpwNnJTtF8PgRAFqL3oF6yN7KkafztBkkajVznEQ",
+    "explorerUrl": "https://explorer.solana.com/tx/3h8XjuAwAHrduFnWc27g7fAD7m4UAnomQWbvxVkpDV7ZtN1ZFpwNnJTtF8PgRAFqL3oF6yN7KkafztBkkajVznEQ?cluster=devnet"
+  },
+  {
+    "posIdx": 1,
+    "agentName": "Mean Reversion",
+    "fixtureId": 18192996,
+    "side": "away",
+    "won": true,
+    "pnl": 27,
+    "txSignature": "3UR2QsGr6XqKttzJW8gjpqdUH66BKHW5uJ38EYrkZiFKY8bqUFANuVkFk2J7N3MfSZnuLn97fqcaPSbawK2EHSmT",
+    "explorerUrl": "https://explorer.solana.com/tx/3UR2QsGr6XqKttzJW8gjpqdUH66BKHW5uJ38EYrkZiFKY8bqUFANuVkFk2J7N3MfSZnuLn97fqcaPSbawK2EHSmT?cluster=devnet"
+  },
+  {
+    "posIdx": 2,
+    "agentName": "Value",
+    "fixtureId": 18182864,
+    "side": "home",
+    "won": true,
+    "pnl": 34,
+    "txSignature": "5XdrZBjdFqT3LCVF1aHziNhSHhTHnpJQjAzia5EcWrivhcZJFLG581zAJ6igfpycovcq1ppJietQnCcM3KeQ6jUe",
+    "explorerUrl": "https://explorer.solana.com/tx/5XdrZBjdFqT3LCVF1aHziNhSHhTHnpJQjAzia5EcWrivhcZJFLG581zAJ6igfpycovcq1ppJietQnCcM3KeQ6jUe?cluster=devnet"
+  },
+  {
+    "posIdx": 3,
+    "agentName": "Market Maker",
+    "fixtureId": 18182808,
+    "side": "away",
+    "won": false,
+    "pnl": -35,
+    "txSignature": "5hurR98EETKo5nfqfK7dLieC72FaXR5jw3AHPouHspzjewfkvsq4yGyPtyNFhzmVmKPmGHMYLDoQvxvCMUA4PVcg",
+    "explorerUrl": "https://explorer.solana.com/tx/5hurR98EETKo5nfqfK7dLieC72FaXR5jw3AHPouHspzjewfkvsq4yGyPtyNFhzmVmKPmGHMYLDoQvxvCMUA4PVcg?cluster=devnet"
+  },
+  {
+    "posIdx": 4,
+    "agentName": "Momentum",
+    "fixtureId": 18143850,
+    "side": "home",
+    "won": true,
+    "pnl": 48,
+    "txSignature": "4vquwRZHbJRK8YXb1pEnLBSzezRdNVgn369N2UUiYSHfTDH1EXbwQ4JkqfNjGAcHvkECiqCWUbPVahUzepVygtRP",
+    "explorerUrl": "https://explorer.solana.com/tx/4vquwRZHbJRK8YXb1pEnLBSzezRdNVgn369N2UUiYSHfTDH1EXbwQ4JkqfNjGAcHvkECiqCWUbPVahUzepVygtRP?cluster=devnet"
+  },
+  {
+    "posIdx": 5,
+    "agentName": "Mean Reversion",
+    "fixtureId": 18193785,
+    "side": "away",
+    "won": true,
+    "pnl": 55,
+    "txSignature": "4MUQ5DY1WWcERSbTX9c7mEohP8ykSje2XeapG6RAbCC2ySHBn8UZiPi6B6Bostao1xjpnuidQfHdbZCiSER1NWkr",
+    "explorerUrl": "https://explorer.solana.com/tx/4MUQ5DY1WWcERSbTX9c7mEohP8ykSje2XeapG6RAbCC2ySHBn8UZiPi6B6Bostao1xjpnuidQfHdbZCiSER1NWkr?cluster=devnet"
+  },
+  {
+    "posIdx": 6,
+    "agentName": "Value",
+    "fixtureId": 18187298,
+    "side": "home",
+    "won": false,
+    "pnl": -50,
+    "txSignature": "QjePh3STDw8Jz5Ai9qLk9dU1Y6qhnV9zSyXpiDLWBtgXrn84ezFbcwhCv5B6nyoidovFLR5DMytCxBb5bGuRXzA",
+    "explorerUrl": "https://explorer.solana.com/tx/QjePh3STDw8Jz5Ai9qLk9dU1Y6qhnV9zSyXpiDLWBtgXrn84ezFbcwhCv5B6nyoidovFLR5DMytCxBb5bGuRXzA?cluster=devnet"
+  },
+  {
+    "posIdx": 7,
+    "agentName": "Market Maker",
+    "fixtureId": 18192996,
+    "side": "away",
+    "won": true,
+    "pnl": 69,
+    "txSignature": "Vf1rHDsQCuNrALPCW4eioQAqTRStJixFdnmFTHK53995tgbEpgMrDzmFJ51Bccvy5ijCKNaP4KsRFMvoHckoQqt",
+    "explorerUrl": "https://explorer.solana.com/tx/Vf1rHDsQCuNrALPCW4eioQAqTRStJixFdnmFTHK53995tgbEpgMrDzmFJ51Bccvy5ijCKNaP4KsRFMvoHckoQqt?cluster=devnet"
+  },
+  {
+    "posIdx": 8,
+    "agentName": "Momentum",
+    "fixtureId": 18182864,
+    "side": "home",
+    "won": true,
+    "pnl": 76,
+    "txSignature": "2kNJC1WvjddC6CVsueaJLhfjWpZUoPNw5ZDnLnxaJFrFvUN5gcDNemB7yrwQNUzW7GWQek1drd9XNKpMxjKAUMvq",
+    "explorerUrl": "https://explorer.solana.com/tx/2kNJC1WvjddC6CVsueaJLhfjWpZUoPNw5ZDnLnxaJFrFvUN5gcDNemB7yrwQNUzW7GWQek1drd9XNKpMxjKAUMvq?cluster=devnet"
+  },
+  {
+    "posIdx": 9,
+    "agentName": "Mean Reversion",
+    "fixtureId": 18182808,
+    "side": "away",
+    "won": false,
+    "pnl": -25,
+    "txSignature": "yScw6ZtbihVgpSRnciYNK55bNqwhR31omUwe4LQ7TRS4RGF1KAt4ezF3in5zASB28T8uZKnfLdBK4Atr3r7hhmu",
+    "explorerUrl": "https://explorer.solana.com/tx/yScw6ZtbihVgpSRnciYNK55bNqwhR31omUwe4LQ7TRS4RGF1KAt4ezF3in5zASB28T8uZKnfLdBK4Atr3r7hhmu?cluster=devnet"
+  },
+  {
+    "posIdx": 10,
+    "agentName": "Value",
+    "fixtureId": 18143850,
+    "side": "home",
+    "won": true,
+    "pnl": 30,
+    "txSignature": "3WXeJLMM1p9sj11UbUbQmkzn1G7rHNUpcbueUUtqmgKVVAHV2J9iB7nV5UGcw8bC1M5pmgZJb6UXPxaw34i9e2rb",
+    "explorerUrl": "https://explorer.solana.com/tx/3WXeJLMM1p9sj11UbUbQmkzn1G7rHNUpcbueUUtqmgKVVAHV2J9iB7nV5UGcw8bC1M5pmgZJb6UXPxaw34i9e2rb?cluster=devnet"
+  },
+  {
+    "posIdx": 11,
+    "agentName": "Market Maker",
+    "fixtureId": 18193785,
+    "side": "away",
+    "won": true,
+    "pnl": 37,
+    "txSignature": "YfWUXGG6bajgpSfc6qTKXsLHqJbKYbQDBQWBtXXkbUBeoGqCKwrpQsnigykbfAtb7hE9n1ryMKSyE6TbUyok3BZ",
+    "explorerUrl": "https://explorer.solana.com/tx/YfWUXGG6bajgpSfc6qTKXsLHqJbKYbQDBQWBtXXkbUBeoGqCKwrpQsnigykbfAtb7hE9n1ryMKSyE6TbUyok3BZ?cluster=devnet"
+  },
+  {
+    "posIdx": 12,
+    "agentName": "Momentum",
+    "fixtureId": 18187298,
+    "side": "home",
+    "won": false,
+    "pnl": -40,
+    "txSignature": "4aRAKcrokbysAmXJ39fUuBc9DodVc9cTomfvnKWrWwgWK2nsc5WnDhr8Kq3HwpVyfxgfU9jWG264qdVqGR2aDfMS",
+    "explorerUrl": "https://explorer.solana.com/tx/4aRAKcrokbysAmXJ39fUuBc9DodVc9cTomfvnKWrWwgWK2nsc5WnDhr8Kq3HwpVyfxgfU9jWG264qdVqGR2aDfMS?cluster=devnet"
+  },
+  {
+    "posIdx": 13,
+    "agentName": "Mean Reversion",
+    "fixtureId": 18192996,
+    "side": "away",
+    "won": true,
+    "pnl": 51,
+    "txSignature": "4KWmkSph4S6CwSyXP33cqGoVHLzU74QrvnUKJTd3Qt5fqCzM7yBMCSZqdVMyNdrZYJjTVgRYyfy1h5BcvbzHGfjw",
+    "explorerUrl": "https://explorer.solana.com/tx/4KWmkSph4S6CwSyXP33cqGoVHLzU74QrvnUKJTd3Qt5fqCzM7yBMCSZqdVMyNdrZYJjTVgRYyfy1h5BcvbzHGfjw?cluster=devnet"
+  },
+  {
+    "posIdx": 14,
+    "agentName": "Value",
+    "fixtureId": 18182864,
+    "side": "home",
+    "won": true,
+    "pnl": 58,
+    "txSignature": "4Vd6hBk97hJtwGyCW8qSbiEcW5NctGYZyXMGMw9p8TarmWNgX5fcHYDYctHd8G6PBRCy6dTuqhapVYtwDbRZscSU",
+    "explorerUrl": "https://explorer.solana.com/tx/4Vd6hBk97hJtwGyCW8qSbiEcW5NctGYZyXMGMw9p8TarmWNgX5fcHYDYctHd8G6PBRCy6dTuqhapVYtwDbRZscSU?cluster=devnet"
+  }
+]

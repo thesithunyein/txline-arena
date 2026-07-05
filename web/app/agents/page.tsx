@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Bot, Pause, TrendingUp, TrendingDown, DollarSign, Repeat } from 'lucide-react';
+import { Bot, Pause, TrendingUp, TrendingDown, DollarSign, Repeat, ExternalLink } from 'lucide-react';
 import { fetchApi, AgentData, PositionData, LeaderboardEntry, MatchData } from '../../lib/api';
 import { useWebSocket, ArenaEvent } from '../../lib/ws';
 import { formatPnl, formatPct } from '../../lib/utils';
@@ -164,10 +164,15 @@ export default function AgentsPage() {
                   </td>
                   <td className="py-3 text-right">
                     {pos.settlementTx ? (
-                      <span className="inline-flex items-center gap-1.5 font-mono text-xs text-gray-700">
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                      <a
+                        href={`https://explorer.solana.com/tx/${pos.settlementTx}?cluster=devnet`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 transition-colors font-mono text-xs"
+                      >
                         {pos.settlementTx.slice(0, 6)}…{pos.settlementTx.slice(-4)}
-                      </span>
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
                     ) : (
                       <span className="text-xs text-gray-400">—</span>
                     )}

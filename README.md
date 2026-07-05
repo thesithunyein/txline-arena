@@ -26,7 +26,10 @@ TxLINE Arena is a multi-agent autonomous trading arena that ingests real-time Tx
 - **Sharp Movement Detection**: Z-score and percentage-change based detection on live TxLINE odds streams, with prediction tracking
 - **4 Strategy Agents**: Momentum, Mean Reversion, Value, and Market Maker — each with Kelly Criterion position sizing
 - **Agent vs Agent Arena**: Agents compete on the same TxLINE feed; leaderboard ranks by P&L, ROI, win rate, Sharpe ratio
+- **Smart Money Consensus Index**: Aggregates all agents' open positions into a real-time consensus score (0-100) showing strategy alignment — a novel &quot;smart money&quot; signal derived from autonomous agent behavior
+- **Performance Attribution**: Decomposes each agent's P&L by signal characteristics (z-score range, market type, direction, confidence) to reveal which edge sources drive returns
 - **Circuit Breaker**: Auto-pauses agents after consecutive losses to prevent capital drain
+- **On-Chain Settlement**: Every settled position is anchored on Solana devnet via the SPL Memo program with SHA-256 canonical hashing — 15 real devnet transactions verifiable on Solana Explorer
 - **On-Chain Data Access**: Real Solana devnet subscription transaction to the TxLINE program; outcomes verified via the TxLINE `stat-validation` endpoint before deterministic settlement
 - **Prediction Accuracy Tracking**: Every signal is scored against the eventual match result to measure real predictive edge
 - **Simulation / Replay Mode**: Deterministic synthetic data engine so the dashboard always demonstrates the product, even after matches end
@@ -353,6 +356,29 @@ Runs unit tests for:
 - **Stream reconnection** — SSE connections occasionally dropped; we had to implement exponential backoff reconnection. A heartbeat/ping mechanism would be helpful.
 - **Historical data access** — for backtesting, we needed historical odds snapshots. A dedicated historical endpoint with pagination would be better than scraping the live feed.
 - **Rate limit documentation** — the rate limits weren't clearly documented. We implemented a conservative token-bucket limiter (60 req/min) but had to guess the actual limits.
+
+## TxLINE Endpoints Used
+
+| Endpoint | Usage |
+|----------|-------|
+| `GET /api/fixtures/snapshot` | Fetch all World Cup fixtures for match metadata |
+| `GET /api/odds/snapshot/:fixtureId` | Get current odds for consensus computation |
+| `GET /api/odds/updates/:epochDay/:hour/:interval` | Polling fallback for odds updates |
+| `GET /api/scores/snapshot/:fixtureId` | Get current scores for live match status |
+| `GET /api/scores/updates/:fixtureId` | Get score updates for settlement |
+| `GET /api/scores/historical/:fixtureId` | Historical scores for backtesting |
+| `GET /api/scores/stat-validation` | Cryptographic outcome verification before settlement |
+| `SSE /api/odds/stream` | Real-time odds stream for sharp movement detection |
+| `SSE /api/scores/stream` | Real-time score stream for match end detection |
+
+## Technical Highlights
+
+- **Core Idea**: Multi-agent autonomous trading arena where 4 strategy agents compete on the same TxLINE feed, with on-chain settlement on Solana devnet
+- **Innovation**: Smart Money Consensus Index (aggregates agent positions into a directional consensus signal) + Performance Attribution (decomposes P&L by signal characteristics)
+- **Data Pipeline**: TxLINE SSE streams → Sharp Movement Detector (z-score + pct-change) → Agent decision engine → Position execution → On-chain settlement via SPL Memo
+- **On-Chain**: 15 real Solana devnet transactions verifiable on [Solana Explorer](https://explorer.solana.com/address/MemoSq4gqqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr?cluster=devnet)
+- **Autonomous**: Fully automated — no human intervention once deployed. Circuit breaker auto-pauses underperforming agents
+- **Tech Stack**: TypeScript, Node.js, Express, LowDB, Next.js 14, TailwindCSS, Solana Web3.js, SPL Memo
 
 ## License
 

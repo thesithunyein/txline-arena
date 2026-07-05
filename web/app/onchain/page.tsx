@@ -128,7 +128,7 @@ export default function OnChainPage() {
                     <th className="text-left py-2 pr-4 font-medium">Agent</th>
                     <th className="text-left py-2 pr-4 font-medium">Position</th>
                     <th className="text-right py-2 pr-4 font-medium">P&amp;L</th>
-                    <th className="text-left py-2 pr-4 font-medium">Settlement Hash</th>
+                    <th className="text-left py-2 pr-4 font-medium">Settlement Tx</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -140,10 +140,15 @@ export default function OnChainPage() {
                         {p.pnl !== null ? `${p.pnl >= 0 ? '+' : ''}${p.pnl.toFixed(2)}` : '—'}
                       </td>
                       <td className="py-2 pr-4">
-                        <span className="inline-flex items-center gap-1.5 font-mono text-xs text-gray-700">
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                        <a
+                          href={`${explorerBase}/tx/${p.settlementTx}?cluster=devnet`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 transition-colors font-mono text-xs"
+                        >
                           {p.settlementTx!.slice(0, 8)}...{p.settlementTx!.slice(-4)}
-                        </span>
+                          <ExternalLink className="h-3 w-3" />
+                        </a>
                       </td>
                     </tr>
                   ))}

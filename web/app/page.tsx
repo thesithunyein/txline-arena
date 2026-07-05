@@ -9,6 +9,8 @@ import { LeaderboardCard } from '../components/LeaderboardCard';
 import { LiveSignalsCard } from '../components/LiveSignalsCard';
 import { MatchesCard } from '../components/MatchesCard';
 import { PredictionAccuracyCard } from '../components/PredictionAccuracyCard';
+import { ConsensusCard } from '../components/ConsensusCard';
+import { AttributionCard } from '../components/AttributionCard';
 
 export default function OverviewPage() {
   const [health, setHealth] = useState<HealthData | null>(null);
@@ -91,6 +93,11 @@ export default function OverviewPage() {
       </div>
 
       <PredictionAccuracyCard signals={signals} />
+
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <ConsensusCard />
+        <AttributionCard />
+      </div>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-8">
