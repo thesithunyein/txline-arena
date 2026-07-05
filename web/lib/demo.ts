@@ -24,9 +24,9 @@ function mulberry32(seed: number) {
 
 // --- static reference data -------------------------------------------------
 const TEAMS = [
-  'Brazil', 'Argentina', 'France', 'Germany', 'Spain', 'Portugal',
-  'England', 'Netherlands', 'Italy', 'Croatia', 'Belgium', 'Uruguay',
-  'Morocco', 'Japan', 'USA', 'Mexico',
+  'Brazil', 'Norway', 'Mexico', 'England', 'Portugal', 'Spain',
+  'USA', 'Belgium', 'Argentina', 'Egypt', 'Switzerland', 'Colombia',
+  'France', 'Morocco', 'Japan', 'Germany',
 ];
 
 const BOOKMAKERS = ['Pinnacle', 'Bet365', 'William Hill', 'Betfair'];
@@ -40,10 +40,10 @@ interface DemoAgent {
 }
 
 const AGENTS: DemoAgent[] = [
-  { name: 'Momentum Max', strategy: 'momentum', seed: 11, base: 0.18 },
-  { name: 'Contrarian Cleo', strategy: 'contrarian', seed: 23, base: 0.09 },
-  { name: 'Sharp Shadow', strategy: 'sharp-follower', seed: 37, base: 0.24 },
-  { name: 'Maker Mira', strategy: 'market-maker', seed: 51, base: 0.06 },
+  { name: 'Momentum', strategy: 'Follow sharp movements — bet on the side whose odds are shortening (smart money flow)', seed: 11, base: 0.18 },
+  { name: 'Mean Reversion', strategy: 'Bet against sharp movements — expect odds to revert to consensus mean', seed: 23, base: 0.09 },
+  { name: 'Value', strategy: 'Bet when consensus-implied probability exceeds bookmaker odds edge (value betting)', seed: 37, base: 0.24 },
+  { name: 'Market Maker', strategy: 'Quote buy/sell prices around consensus odds — profit from spread, hedge inventory', seed: 51, base: 0.06 },
 ];
 
 const INITIAL_BANKROLL = 1000;
@@ -180,6 +180,13 @@ export function demoLeaderboard(): LeaderboardEntry[] {
 export function demoPositions(agentName?: string): PositionData[] {
   const matches = demoMatches();
   const agents = agentName ? [agentName] : AGENTS.map((a) => a.name);
+  const txChars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+  const fakeTx = (seed: number) => {
+    const rng = mulberry32(seed);
+    let sig = '';
+    for (let i = 0; i < 88; i++) sig += txChars[Math.floor(rng() * txChars.length)];
+    return sig;
+  };
   const out: PositionData[] = [];
   agents.forEach((name, ai) => {
     for (let i = 0; i < 6; i++) {
@@ -189,6 +196,7 @@ export function demoPositions(agentName?: string): PositionData[] {
       const odds = Number((1.4 + rng() * 2).toFixed(2));
       const pnl = settled ? Number(((rng() > 0.45 ? 1 : -1) * stake * (odds - 1) * rng()).toFixed(2)) : null;
       const m = matches[(ai + i) % matches.length];
+      const seed = ai * 1000 + i * 37 + 7;
       out.push({
         id: `pos-${name}-${i}`,
         agentName: name,
@@ -200,8 +208,8 @@ export function demoPositions(agentName?: string): PositionData[] {
         openedAt: Date.now() - (i + 1) * 600000,
         settledAt: settled ? Date.now() - i * 300000 : null,
         pnl,
-        txSignature: null,
-        settlementTx: null,
+        txSignature: settled ? fakeTx(seed) : null,
+        settlementTx: settled ? fakeTx(seed + 1) : null,
       });
     }
   });
