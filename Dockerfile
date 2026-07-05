@@ -10,7 +10,6 @@ RUN npm install
 COPY tsconfig.json ./
 COPY src/ ./src/
 COPY scripts/ ./scripts/
-COPY keypair.json ./
 RUN npm run build && ls -la dist/src/index.js
 
 # Remove dev deps to shrink image
@@ -22,8 +21,11 @@ ENV NODE_ENV=production
 ENV TXLINE_BASE_URL=https://txline.txodds.com
 ENV SOLANA_RPC_URL=https://api.devnet.solana.com
 ENV DB_PATH=/tmp/txline_arena.json
-ENV SOLANA_WALLET_KEYPAIR_PATH=/app/keypair.json
 ENV SETTLEMENT_ONCHAIN=true
+
+# Decode devnet keypair from base64 env var at runtime
+# The SOLANA_WALLET_KEYPAIR env var should contain the raw JSON array.
+# SOLANA_WALLET_KEYPAIR_PATH is not needed since the code checks SOLANA_WALLET_KEYPAIR first.
 
 EXPOSE 7860
 
