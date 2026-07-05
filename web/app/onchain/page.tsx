@@ -120,40 +120,50 @@ export default function OnChainPage() {
             No on-chain settlements yet. Run <code className="rounded bg-gray-100 px-1.5 py-0.5 text-gray-900 font-mono text-xs">npm run settle-onchain</code> with a funded devnet wallet to generate real settlement transactions.
           </p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-100 text-xs text-gray-500">
-                  <th className="text-left py-2 pr-4 font-medium">Agent</th>
-                  <th className="text-left py-2 pr-4 font-medium">Position</th>
-                  <th className="text-right py-2 pr-4 font-medium">P&amp;L</th>
-                  <th className="text-left py-2 pr-4 font-medium">Tx Signature</th>
-                </tr>
-              </thead>
-              <tbody>
-                {settledWithTx.slice(0, 10).map((p) => (
-                  <tr key={p.id} className="border-b border-gray-50">
-                    <td className="py-2 pr-4 text-gray-900">{p.agentName}</td>
-                    <td className="py-2 pr-4 text-gray-500 font-mono text-xs">{p.id}</td>
-                    <td className={`py-2 pr-4 text-right font-medium ${p.pnl !== null && p.pnl >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                      {p.pnl !== null ? `${p.pnl >= 0 ? '+' : ''}${p.pnl.toFixed(2)}` : '—'}
-                    </td>
-                    <td className="py-2 pr-4">
-                      <a
-                        href={`${explorerBase}/tx/${p.settlementTx}?cluster=devnet`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition-colors font-mono text-xs"
-                      >
-                        {p.settlementTx!.slice(0, 8)}...{p.settlementTx!.slice(-4)}
-                        <ExternalLink className="h-3 w-3" />
-                      </a>
-                    </td>
+          <>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-100 text-xs text-gray-500">
+                    <th className="text-left py-2 pr-4 font-medium">Agent</th>
+                    <th className="text-left py-2 pr-4 font-medium">Position</th>
+                    <th className="text-right py-2 pr-4 font-medium">P&amp;L</th>
+                    <th className="text-left py-2 pr-4 font-medium">Settlement Hash</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {settledWithTx.slice(0, 10).map((p) => (
+                    <tr key={p.id} className="border-b border-gray-50">
+                      <td className="py-2 pr-4 text-gray-900">{p.agentName}</td>
+                      <td className="py-2 pr-4 text-gray-500 font-mono text-xs">{p.id}</td>
+                      <td className={`py-2 pr-4 text-right font-medium ${p.pnl !== null && p.pnl >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                        {p.pnl !== null ? `${p.pnl >= 0 ? '+' : ''}${p.pnl.toFixed(2)}` : '—'}
+                      </td>
+                      <td className="py-2 pr-4">
+                        <span className="inline-flex items-center gap-1.5 font-mono text-xs text-gray-700">
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                          {p.settlementTx!.slice(0, 8)}...{p.settlementTx!.slice(-4)}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-xs text-gray-400 mt-4">
+              Settlements are anchored on Solana devnet via the{' '}
+              <a
+                href={`${explorerBase}/address/${memoProgramId}?cluster=devnet`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-0.5 text-blue-600 hover:text-blue-800 transition-colors"
+              >
+                SPL Memo program
+                <ExternalLink className="h-3 w-3" />
+              </a>
+              {' '}with SHA-256 hashes of the canonical settlement payload.
+            </p>
+          </>
         )}
       </div>
 
