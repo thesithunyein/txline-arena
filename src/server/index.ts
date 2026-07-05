@@ -32,7 +32,7 @@ export class Server {
   }
 
   private setupRoutes(): void {
-    this.app.get('/health', (_req, res) => {
+    const healthHandler = (_req: any, res: any) => {
       res.json({
         status: 'ok',
         mode: process.env.LIVE_MODE === 'true' ? 'live' : 'simulation',
@@ -43,7 +43,10 @@ export class Server {
           paused: a.isPaused(),
         })),
       });
-    });
+    };
+
+    this.app.get('/health', healthHandler);
+    this.app.get('/api/health', healthHandler);
 
     this.app.get('/api/signals', async (_req, res) => {
       const limit = parseInt(_req.query.limit as string) || 50;

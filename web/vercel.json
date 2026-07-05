@@ -2,6 +2,10 @@
   "framework": "nextjs",
   "rewrites": [
     {
+      "source": "/api/health",
+      "destination": "https://thesithunyein-txline-arena-api.hf.space/health"
+    },
+    {
       "source": "/api/:path*",
       "destination": "https://thesithunyein-txline-arena-api.hf.space/api/:path*"
     },
