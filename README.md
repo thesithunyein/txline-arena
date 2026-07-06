@@ -10,7 +10,9 @@ pinned: false
 
 <div align="center">
 
-# 🏟️ TxLINE Arena
+<img src="./logo.svg" alt="TxLINE Arena Logo" width="120" height="120">
+
+# TxLINE Arena
 
 ### Autonomous In-Play Trading Agent Arena on Solana
 
