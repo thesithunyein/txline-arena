@@ -1,6 +1,5 @@
 ---
 title: TxLINE Arena API
-emoji: 🏟️
 colorFrom: blue
 colorTo: green
 sdk: docker
@@ -35,11 +34,11 @@ pinned: false
 
 ---
 
-## 🎯 The Problem
+## The Problem
 
 Sports betting markets move in **milliseconds**. Odds shift constantly as bookmakers react to injuries, weather, momentum shifts, and sharp money flows. Human traders simply **cannot react fast enough** — and when they do, emotion and bias corrupt their decisions.
 
-## 💡 The Solution
+## The Solution
 
 **TxLINE Arena** deploys **4 autonomous AI trading agents** that ingest real-time TxLINE sports data feeds via SSE streams, detect sharp odds movements using statistical z-score analysis, and compete against each other in a fully autonomous arena — with every settlement cryptographically anchored on **Solana devnet**.
 
@@ -50,42 +49,42 @@ Just algorithms, data, and on-chain proof.
 
 ---
 
-## ⚡ Quick Links
+## Quick Links
 
 | Resource | URL |
 |----------|-----|
-| 🟢 **Live Dashboard** | https://txline-arena.vercel.app/ |
-| 🔵 **Backend API** | https://thesithunyein-txline-arena-api.hf.space/health |
-| 🟣 **Solana Explorer (Settlements)** | [View on-chain TXs](https://explorer.solana.com/address/MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr?cluster=devnet) |
-| 📦 **GitHub Repo** | https://github.com/thesithunyein/txline-arena |
+| **Live Dashboard** | https://txline-arena.vercel.app/ |
+| **Backend API** | https://thesithunyein-txline-arena-api.hf.space/health |
+| **Solana Explorer (Settlements)** | [View on-chain TXs](https://explorer.solana.com/address/MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr?cluster=devnet) |
+| **GitHub Repo** | https://github.com/thesithunyein/txline-arena |
 
 ---
 
-## 🏆 Competition Edge — What Makes This Different
+## Competition Edge — What Makes This Different
 
-### 1. 🧠 Smart Money Consensus Index™ (Innovation)
+### 1. Smart Money Consensus Index™ (Innovation)
 
 A novel real-time metric that aggregates all 4 agents' open positions into a **0-100 alignment score**. When agents independently converge on the same side, the consensus score rises — signaling high-confidence "smart money" alignment. When they diverge, the market is uncertain.
 
 > **This doesn't exist in any sports trading platform.** It's a collective intelligence signal derived from autonomous strategy agreement — not a single model's prediction, but the emergent consensus of 4 independent strategies.
 
-### 2. 📊 Performance Attribution Engine™ (Innovation)
+### 2. Performance Attribution Engine™ (Innovation)
 
 Decomposes each agent's P&L by **signal characteristics** — z-score range, odds direction, confidence level, and market type. Judges can see exactly **which edge sources drive returns** for each strategy, not just the bottom line.
 
 > Traditional platforms show "agent made +$50." We show "agent made +$50, with 72% of profit from high-z-score shortening signals at >0.75 confidence." That's institutional-grade analytics.
 
-### 3. ⛓️ Real On-Chain Settlement (Not Simulated)
+### 3. Real On-Chain Settlement (Not Simulated)
 
 **15 real Solana devnet transactions** — verifiable on Solana Explorer right now. Each settlement is anchored via the SPL Memo program with a SHA-256 hash of the canonical settlement payload. Click any tx link in the dashboard and see it on-chain.
 
-### 4. 🔄 Fully Autonomous with Circuit Breaker
+### 4. Fully Autonomous with Circuit Breaker
 
 Agents run 24/7 with zero human input. A circuit breaker auto-pauses any agent after 3 consecutive losses (30-min cooldown). The system self-heals and self-regulates.
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ![TxLINE Arena Architecture](./architecture.svg?v=2)
 
@@ -100,27 +99,27 @@ TxLINE SSE Streams → Sharp Movement Detector (z-score) → 4 Strategy Agents
 
 ---
 
-## 📋 Feature Overview
+## Feature Overview
 
 | Feature | Description | Status |
 |---------|-------------|--------|
-| 🔍 **Sharp Movement Detection** | Z-score + percentage-change on live odds streams | ✅ Live |
-| 🤖 **4 Strategy Agents** | Momentum, Mean Reversion, Value, Market Maker | ✅ Live |
-| 📐 **Kelly Criterion Sizing** | Optimal bet sizing based on edge and odds | ✅ Live |
-| 🛡️ **Circuit Breaker** | Auto-pause after 3 consecutive losses (30-min cooldown) | ✅ Live |
-| 🧠 **Smart Money Consensus Index** | 0-100 agent alignment score (innovation) | ✅ Live |
-| 📊 **Performance Attribution** | P&L decomposed by z-score, direction, confidence, market | ✅ Live |
-| ⛓️ **On-Chain Settlement** | SPL Memo + SHA-256 on Solana devnet | ✅ 15 real TXs |
-| 🔐 **Outcome Verification** | TxLINE stat-validation before settlement | ✅ Live |
-| 📈 **Prediction Accuracy** | Every signal scored against actual match result | ✅ Live |
-| 📡 **Real-Time Dashboard** | Next.js 14 + WebSocket live updates | ✅ Live |
-| 🔔 **Telegram Alerts** | Signal, position, and settlement notifications | ✅ Live |
-| 🎮 **Simulation Mode** | Deterministic synthetic data for demo fallback | ✅ Live |
-| 🏦 **Backtest Engine** | Historical replay with equity curves and drawdown | ✅ Live |
+| **Sharp Movement Detection** | Z-score + percentage-change on live odds streams | ✅ Live |
+| **4 Strategy Agents** | Momentum, Mean Reversion, Value, Market Maker | ✅ Live |
+| **Kelly Criterion Sizing** | Optimal bet sizing based on edge and odds | ✅ Live |
+| **Circuit Breaker** | Auto-pause after 3 consecutive losses (30-min cooldown) | ✅ Live |
+| **Smart Money Consensus Index** | 0-100 agent alignment score (innovation) | ✅ Live |
+| **Performance Attribution** | P&L decomposed by z-score, direction, confidence, market | ✅ Live |
+| **On-Chain Settlement** | SPL Memo + SHA-256 on Solana devnet | ✅ 15 real TXs |
+| **Outcome Verification** | TxLINE stat-validation before settlement | ✅ Live |
+| **Prediction Accuracy** | Every signal scored against actual match result | ✅ Live |
+| **Real-Time Dashboard** | Next.js 14 + WebSocket live updates | ✅ Live |
+| **Telegram Alerts** | Signal, position, and settlement notifications | ✅ Live |
+| **Simulation Mode** | Deterministic synthetic data for demo fallback | ✅ Live |
+| **Backtest Engine** | Historical replay with equity curves and drawdown | ✅ Live |
 
 ---
 
-## 🤖 Strategy Agents
+## Strategy Agents
 
 | Agent | Strategy | Edge Source |
 |-------|----------|-------------|
@@ -133,7 +132,7 @@ All agents use **Kelly Criterion** for stake sizing with a **25% max bankroll** 
 
 ---
 
-## ⛓️ On-Chain Settlement
+## On-Chain Settlement
 
 Every settled position is anchored on **Solana devnet** via the **SPL Memo program** with a **SHA-256 hash** of the canonical settlement payload.
 
@@ -159,7 +158,7 @@ TxLINE-Arena|settle|pos=a3f2c1e8b4d2|fixture=18192996|away|outcome=away|WIN|pnl=
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
@@ -173,7 +172,7 @@ TxLINE-Arena|settle|pos=a3f2c1e8b4d2|fixture=18192996|away|outcome=away|WIN|pnl=
 
 ---
 
-## 📡 TxLINE API Integration
+## TxLINE API Integration
 
 ### Endpoints Used
 
@@ -197,7 +196,7 @@ TxLINE-Arena|settle|pos=a3f2c1e8b4d2|fixture=18192996|away|outcome=away|WIN|pnl=
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -279,7 +278,7 @@ LIVE_MODE=false npm run dev
 
 ---
 
-## 📡 API Endpoints
+## API Endpoints
 
 | Endpoint | Description |
 |----------|-------------|
@@ -298,7 +297,7 @@ LIVE_MODE=false npm run dev
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 txline-arena/
@@ -361,7 +360,7 @@ txline-arena/
 
 ---
 
-## 🚢 Deployment
+## Deployment
 
 ### Frontend — Vercel
 
@@ -393,7 +392,7 @@ txline-arena/
 
 ---
 
-## 🧪 Testing
+## Testing
 
 ```bash
 npm test
@@ -406,7 +405,7 @@ Covers:
 
 ---
 
-## 💬 TxLINE API Experience
+## TxLINE API Experience
 
 ### What We Loved
 
@@ -424,7 +423,7 @@ Covers:
 
 ---
 
-## 📝 Technical Highlights (For Judges)
+## Technical Highlights (For Judges)
 
 - **Core Idea**: Multi-agent autonomous trading arena where 4 strategy agents compete on the same TxLINE feed, with on-chain settlement on Solana devnet
 - **Innovation #1**: Smart Money Consensus Index — aggregates agent positions into a 0-100 directional consensus signal (novel, no existing equivalent)
@@ -436,6 +435,6 @@ Covers:
 
 ---
 
-## 📄 License
+## License
 
 MIT
