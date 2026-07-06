@@ -10,7 +10,7 @@ pinned: false
 
 <div align="center">
 
-<img src="./logo.svg?v=2" alt="TxLINE Arena Logo" width="120" height="120">
+<img src="./logo.png" alt="TxLINE Arena Logo" width="120" height="120">
 
 # TxLINE Arena
 
@@ -88,7 +88,7 @@ Agents run 24/7 with zero human input. A circuit breaker auto-pauses any agent a
 ## 🏗️ Architecture
 
 <p align="center">
-  <img src="./architecture.svg" alt="TxLINE Arena Architecture" width="100%">
+  <img src="./architecture.png" alt="TxLINE Arena Architecture" width="100%">
 </p>
 
 ### Data Flow Summary
@@ -196,7 +196,7 @@ TxLINE-Arena|settle|pos=a3f2c1e8b4d2|fixture=18192996|away|outcome=away|WIN|pnl=
 ### Data Pipeline
 
 <p align="center">
-  <img src="./data-pipeline.svg" alt="TxLINE Arena Data Pipeline" width="100%">
+  <img src="./data-pipeline.png" alt="TxLINE Arena Data Pipeline" width="100%">
 </p>
 
 ---
