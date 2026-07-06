@@ -87,7 +87,7 @@ Agents run 24/7 with zero human input. A circuit breaker auto-pauses any agent a
 
 ## 🏗️ Architecture
 
-![TxLINE Arena Architecture](./architecture.svg)
+![TxLINE Arena Architecture](./architecture.svg?v=2)
 
 ### Data Flow Summary
 
