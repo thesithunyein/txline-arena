@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="960" height="520">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="boxData" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e40af"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <linearGradient id="boxEngine" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0891b2"/>
+      <stop offset="100%" stop-color="#0e7490"/>
+    </linearGradient>
+    <linearGradient id="boxAgent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#6d28d9"/>
+    </linearGradient>
+    <linearGradient id="boxChain" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f766e"/>
+      <stop offset="100%" stop-color="#115e59"/>
+    </linearGradient>
+    <linearGradient id="boxInnovation" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ea580c"/>
+      <stop offset="100%" stop-color="#c2410c"/>
+    </linearGradient>
+    <linearGradient id="boxUI" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+    </marker>
+    <marker id="arrowChain" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="520" rx="16" fill="url(#bg)"/>
+
+  <!-- Section labels -->
+  <text x="80" y="38" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="600" fill="#475569">TxLINE Data Feed</text>
+  <text x="300" y="38" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="600" fill="#475569">Detection Engine</text>
+  <text x="520" y="38" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="600" fill="#475569">Agent Arena</text>
+  <text x="520" y="220" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="600" fill="#475569">On-Chain Settlement</text>
+  <text x="760" y="220" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="600" fill="#475569">Innovation Layer</text>
+  <text x="520" y="380" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="600" fill="#475569">Presentation</text>
+
+  <!-- Data Feed boxes -->
+  <rect x="30" y="55" width="160" height="48" rx="10" fill="url(#boxData)"/>
+  <text x="110" y="78" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="600" fill="white">TxLINE REST API</text>
+  <text x="110" y="94" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" fill="#bfdbfe">fixtures + odds</text>
+
+  <rect x="30" y="115" width="160" height="48" rx="10" fill="url(#boxData)"/>
+  <text x="110" y="138" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="600" fill="white">SSE Streams</text>
+  <text x="110" y="154" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" fill="#bfdbfe">odds + scores</text>
+
+  <rect x="30" y="175" width="160" height="48" rx="10" fill="url(#boxData)"/>
+  <text x="110" y="198" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="600" fill="white">stat-validation</text>
+  <text x="110" y="214" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" fill="#bfdbfe">outcome verification</text>
+
+  <!-- Detection Engine -->
+  <rect x="250" y="85" width="180" height="78" rx="10" fill="url(#boxEngine)"/>
+  <text x="340" y="112" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="600" fill="white">Sharp Movement Detector</text>
+  <text x="340" y="132" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" fill="#cffafe">Z-score + % change</text>
+  <text x="340" y="150" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" fill="#cffafe">20-tick rolling window</text>
+
+  <!-- Agents -->
+  <rect x="500" y="55" width="140" height="38" rx="8" fill="url(#boxAgent)"/>
+  <text x="570" y="72" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="white">Momentum</text>
+  <text x="570" y="86" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#ddd6fe">follows smart money</text>
+
+  <rect x="500" y="103" width="140" height="38" rx="8" fill="url(#boxAgent)"/>
+  <text x="570" y="120" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="white">Mean Reversion</text>
+  <text x="570" y="134" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#ddd6fe">fades sharp moves</text>
+
+  <rect x="660" y="55" width="140" height="38" rx="8" fill="url(#boxAgent)"/>
+  <text x="730" y="72" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="white">Value</text>
+  <text x="730" y="86" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#ddd6fe">finds mispriced odds</text>
+
+  <rect x="660" y="103" width="140" height="38" rx="8" fill="url(#boxAgent)"/>
+  <text x="730" y="120" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="white">Market Maker</text>
+  <text x="730" y="134" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#ddd6fe">provides liquidity</text>
+
+  <!-- Circuit Breaker -->
+  <rect x="500" y="155" width="300" height="38" rx="8" fill="#be185d"/>
+  <text x="650" y="172" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="white">Circuit Breaker</text>
+  <text x="650" y="186" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#fecdd3">auto-pause on 3 consecutive losses</text>
+
+  <!-- On-Chain Settlement -->
+  <rect x="500" y="240" width="160" height="58" rx="10" fill="url(#boxChain)"/>
+  <text x="580" y="263" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="white">Deterministic Settlement</text>
+  <text x="580" y="281" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" fill="#99f6e4">SHA-256 canonical hash</text>
+  <text x="580" y="295" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#99f6e4">TxLINE stat-validation</text>
+
+  <rect x="500" y="315" width="160" height="42" rx="10" fill="#0f172a"/>
+  <text x="580" y="335" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="#5eead4">SPL Memo Program</text>
+  <text x="580" y="351" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#5eead4">Solana Devnet</text>
+
+  <rect x="500" y="375" width="160" height="42" rx="10" fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
+  <text x="580" y="395" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="#93c5fd">Solana Explorer</text>
+  <text x="580" y="411" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#93c5fd">publicly verifiable</text>
+
+  <!-- Innovation Layer -->
+  <rect x="700" y="240" width="220" height="58" rx="10" fill="url(#boxInnovation)"/>
+  <text x="810" y="263" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="white">Smart Money Consensus</text>
+  <text x="810" y="281" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" fill="#ffedd5">0-100 agent alignment score</text>
+  <text x="810" y="295" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#ffedd5">collective intelligence signal</text>
+
+  <rect x="700" y="315" width="220" height="58" rx="10" fill="url(#boxInnovation)"/>
+  <text x="810" y="338" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="white">Performance Attribution</text>
+  <text x="810" y="356" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" fill="#ffedd5">P&L by z-score, direction</text>
+  <text x="810" y="370" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#ffedd5">confidence, market type</text>
+
+  <!-- Presentation -->
+  <rect x="250" y="410" width="130" height="48" rx="10" fill="url(#boxUI)"/>
+  <text x="315" y="433" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="white">Express REST API</text>
+  <text x="315" y="449" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#cbd5e1">HTTP + WebSocket</text>
+
+  <rect x="400" y="410" width="130" height="48" rx="10" fill="url(#boxUI)"/>
+  <text x="465" y="433" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="white">Next.js Dashboard</text>
+  <text x="465" y="449" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#cbd5e1">real-time UI</text>
+
+  <rect x="550" y="410" width="130" height="48" rx="10" fill="url(#boxUI)"/>
+  <text x="615" y="433" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="white">Telegram Alerts</text>
+  <text x="615" y="449" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#cbd5e1">signal + settlement</text>
+
+  <!-- Arrows -->
+  <!-- SSE Streams -> Detector -->
+  <path d="M 190 139 L 250 124" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- Detector -> Momentum -->
+  <path d="M 430 105 L 500 74" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- Detector -> Mean Reversion -->
+  <path d="M 430 124 L 500 122" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- Detector -> Value -->
+  <path d="M 430 124 L 660 74" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- Detector -> Market Maker -->
+  <path d="M 430 143 L 660 122" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- Agent -> Circuit Breaker -->
+  <path d="M 570 141 L 650 155" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 730 141 L 650 155" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- Circuit Breaker -> Settlement -->
+  <path d="M 650 193 L 650 240" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- stat-validation -> Settlement -->
+  <path d="M 190 199 L 490 250" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- Settlement -> SPL Memo -->
+  <path d="M 580 298 L 580 315" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#arrowChain)"/>
+  <!-- SPL Memo -> Explorer -->
+  <path d="M 580 357 L 580 375" fill="none" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- Agents -> Consensus -->
+  <path d="M 800 141 L 800 240" fill="none" stroke="#f97316" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- Agents -> Attribution -->
+  <path d="M 700 141 L 700 315" fill="none" stroke="#f97316" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- Settlement -> Attribution -->
+  <path d="M 660 269 L 700 315" fill="none" stroke="#f97316" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- REST API -> Dashboard -->
+  <path d="M 380 434 L 400 434" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- Dashboard -> Telegram -->
+  <path d="M 530 434 L 550 434" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- Circuit Breaker -> Telegram -->
+  <path d="M 650 193 L 615 410" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- Circuit Breaker -> API -->
+  <path d="M 500 174 L 315 410" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+</svg>

@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 200" width="1120" height="200">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="box1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e40af"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <linearGradient id="box2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0891b2"/>
+      <stop offset="100%" stop-color="#0e7490"/>
+    </linearGradient>
+    <linearGradient id="box3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#6d28d9"/>
+    </linearGradient>
+    <linearGradient id="box4" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f766e"/>
+      <stop offset="100%" stop-color="#115e59"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981"/>
+    </marker>
+  </defs>
+
+  <rect width="1120" height="200" rx="16" fill="url(#bg)"/>
+
+  <!-- Boxes -->
+  <rect x="20" y="75" width="120" height="50" rx="10" fill="url(#box1)"/>
+  <text x="80" y="95" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="white">TxLINE SSE</text>
+  <text x="80" y="113" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#bfdbfe">odds stream</text>
+
+  <rect x="170" y="75" width="120" height="50" rx="10" fill="url(#box2)"/>
+  <text x="230" y="95" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="white">Odds Window</text>
+  <text x="230" y="113" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#cffafe">20-tick rolling</text>
+
+  <rect x="320" y="75" width="120" height="50" rx="10" fill="url(#box3)"/>
+  <text x="380" y="95" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="white">Signal Detected</text>
+  <text x="380" y="113" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#ddd6fe">z-score > 2.0</text>
+
+  <rect x="470" y="75" width="120" height="50" rx="10" fill="url(#box3)"/>
+  <text x="530" y="95" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="white">Agent Decision</text>
+  <text x="530" y="113" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#ddd6fe">4 strategies</text>
+
+  <rect x="620" y="75" width="120" height="50" rx="10" fill="url(#box3)"/>
+  <text x="680" y="95" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="white">Kelly Sizing</text>
+  <text x="680" y="113" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#ddd6fe">optimal stake</text>
+
+  <rect x="770" y="75" width="120" height="50" rx="10" fill="url(#box3)"/>
+  <text x="830" y="95" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="white">Position Opened</text>
+  <text x="830" y="113" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#ddd6fe">+ Telegram alert</text>
+
+  <rect x="920" y="75" width="120" height="50" rx="10" fill="url(#box4)"/>
+  <text x="980" y="95" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="white">Settlement</text>
+  <text x="980" y="113" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="9" fill="#99f6e4">stat-validation</text>
+
+  <rect x="920" y="145" width="120" height="40" rx="10" fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
+  <text x="980" y="162" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" font-weight="600" fill="#93c5fd">SPL Memo</text>
+  <text x="980" y="178" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="8" fill="#93c5fd">Solana Explorer</text>
+
+  <!-- Arrows -->
+  <path d="M 140 100 L 170 100" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 290 100 L 320 100" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 440 100 L 470 100" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 590 100 L 620 100" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 740 100 L 770 100" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 890 100 L 920 100" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 980 125 L 980 145" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#arrowGreen)"/>
+
+  <!-- Bottom score stream path -->
+  <rect x="170" y="145" width="120" height="40" rx="10" fill="url(#box1)"/>
+  <text x="230" y="162" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" font-weight="600" fill="white">TxLINE Scores</text>
+  <text x="230" y="178" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="8" fill="#bfdbfe">match end event</text>
+
+  <path d="M 290 165 L 770 125" fill="none" stroke="#64748b" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
+</svg>
