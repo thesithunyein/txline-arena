@@ -89,46 +89,46 @@ Agents run 24/7 with zero human input. A circuit breaker auto-pauses any agent a
 
 ```mermaid
 graph TB
-    subgraph "TxLINE Data Feed"
-        TX[TxLINE REST API]
-        SSE[SSE Streams<br/>Odds + Scores]
-        VAL[stat-validation<br/>Endpoint]
+    subgraph TxLINE["TxLINE Data Feed"]
+        TX["TxLINE REST API"]
+        SSE["SSE Streams\nOdds + Scores"]
+        VAL["stat-validation\nEndpoint"]
     end
 
-    subgraph "Detection Engine"
-        DET[Sharp Movement Detector<br/>Z-score + Pct Change]
-        WIN[Sliding Odds Window<br/>20-tick rolling stats]
+    subgraph Detection["Detection Engine"]
+        DET["Sharp Movement Detector\nZ-score + Pct Change"]
+        WIN["Sliding Odds Window\n20-tick rolling stats"]
         DET --> WIN
     end
 
-    subgraph "Agent Arena"
-        MOM[Momentum Agent<br/>Follows smart money]
-        REV[Mean Reversion Agent<br/>Fades sharp moves]
-        VAL2[Value Agent<br/>Finds edge vs consensus]
-        MM[Market Maker Agent<br/>Profits from spread]
-        CB[Circuit Breaker<br/>Auto-pause on 3 losses]
+    subgraph Arena["Agent Arena"]
+        MOM["Momentum Agent\nFollows smart money"]
+        REV["Mean Reversion Agent\nFades sharp moves"]
+        VAL2["Value Agent\nFinds edge vs consensus"]
+        MM["Market Maker Agent\nProfits from spread"]
+        CB["Circuit Breaker\nAuto-pause on 3 losses"]
         MOM --> CB
         REV --> CB
         VAL2 --> CB
         MM --> CB
     end
 
-    subgraph "On-Chain Settlement"
-        SET[Deterministic Settlement<br/>SHA-256 canonical hash]
-        MEMO[SPL Memo Program<br/>Solana Devnet]
-        EXPL[Solana Explorer<br/>Publicly verifiable]
+    subgraph Chain["On-Chain Settlement"]
+        SET["Deterministic Settlement\nSHA-256 canonical hash"]
+        MEMO["SPL Memo Program\nSolana Devnet"]
+        EXPL["Solana Explorer\nPublicly verifiable"]
     end
 
-    subgraph "Innovation Layer"
-        CON[Smart Money Consensus Index<br/>0-100 agent alignment]
-        ATTR[Performance Attribution<br/>P&L by signal characteristics]
+    subgraph Innovation["Innovation Layer"]
+        CON["Smart Money Consensus Index\n0-100 agent alignment"]
+        ATTR["Performance Attribution\nP&L by signal characteristics"]
     end
 
-    subgraph "Presentation"
-        API[Express REST API]
-        WS[WebSocket Server<br/>Live events]
-        UI[Next.js 14 Dashboard<br/>Real-time UI]
-        TG[Telegram Alerts<br/>Signal + Position + Settlement]
+    subgraph UI_Layer["Presentation"]
+        API["Express REST API"]
+        WS["WebSocket Server\nLive events"]
+        UI["Next.js 14 Dashboard\nReal-time UI"]
+        TG["Telegram Alerts\nSignal + Position + Settlement"]
     end
 
     SSE --> DET
@@ -257,17 +257,17 @@ TxLINE-Arena|settle|pos=a3f2c1e8b4d2|fixture=18192996|away|outcome=away|WIN|pnl=
 
 ```mermaid
 graph LR
-    A[TxLINE SSE Stream] -->|odds update| B[Odds Window<br/>20-tick rolling]
-    B -->|z-score| C{Z > 2.0 AND<br/>pct > 10%?}
-    C -->|Yes| D[Signal Generated<br/>+ confidence score]
+    A["TxLINE SSE Stream"] -->|odds update| B["Odds Window\n20-tick rolling"]
+    B -->|z-score| C{"Z > 2.0 AND\npct > 10%?"}
+    C -->|Yes| D["Signal Generated\n+ confidence score"]
     C -->|No| B
-    D --> E[Agent Decision Engine<br/>4 strategies evaluate]
-    E --> F[Kelly Criterion<br/>stake sizing]
-    F --> G[Position Opened<br/>+ Telegram alert]
-    H[TxLINE Score Stream] -->|match end| I[stat-validation<br/>verify result]
-    I --> J[Deterministic Settlement<br/>WIN/LOSS + P&L]
-    J --> K[SPL Memo on Devnet<br/>SHA-256 hash anchored]
-    K --> L[Solana Explorer<br/>publicly verifiable]
+    D --> E["Agent Decision Engine\n4 strategies evaluate"]
+    E --> F["Kelly Criterion\nstake sizing"]
+    F --> G["Position Opened\n+ Telegram alert"]
+    H["TxLINE Score Stream"] -->|match end| I["stat-validation\nverify result"]
+    I --> J["Deterministic Settlement\nWIN/LOSS + P&L"]
+    J --> K["SPL Memo on Devnet\nSHA-256 hash anchored"]
+    K --> L["Solana Explorer\npublicly verifiable"]
 ```
 
 ---
