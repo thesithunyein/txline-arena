@@ -3,58 +3,32 @@ export function Logo({ className = 'h-9 w-9' }: { className?: string }) {
     <svg viewBox="0 0 64 64" className={className} aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="logo-bg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#1e293b" />
-          <stop offset="100%" stopColor="#0f172a" />
+          <stop offset="0%" stopColor="#0f172a" />
+          <stop offset="100%" stopColor="#115e59" />
         </linearGradient>
-        <linearGradient id="logo-bolt" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#34d399" />
-          <stop offset="100%" stopColor="#059669" />
+        <linearGradient id="logo-bar" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="100%" stopColor="#e0f2fe" />
         </linearGradient>
-        <linearGradient id="logo-ring" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#60a5fa" />
-          <stop offset="100%" stopColor="#3b82f6" />
+        <linearGradient id="logo-accent" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#5eead4" />
+          <stop offset="100%" stopColor="#2dd4bf" />
         </linearGradient>
       </defs>
 
-      {/* Background with subtle gradient */}
+      {/* Rounded square background */}
       <rect width="64" height="64" rx="16" fill="url(#logo-bg)" />
 
-      {/* Arena ring — represents the competitive arena */}
-      <ellipse
-        cx="32"
-        cy="34"
-        rx="22"
-        ry="14"
-        fill="none"
-        stroke="url(#logo-ring)"
-        strokeWidth="2.5"
-        opacity="0.35"
-      />
-      <ellipse
-        cx="32"
-        cy="34"
-        rx="16"
-        ry="10"
-        fill="none"
-        stroke="url(#logo-ring)"
-        strokeWidth="1.5"
-        opacity="0.2"
-      />
+      {/* Four rising bars */}
+      <g transform="translate(11, 17)">
+        <rect x="0" y="18" width="7" height="12" rx="3.5" fill="url(#logo-bar)" opacity="0.7" />
+        <rect x="8.5" y="11" width="7" height="19" rx="3.5" fill="url(#logo-bar)" opacity="0.85" />
+        <rect x="17" y="6" width="7" height="24" rx="3.5" fill="url(#logo-bar)" opacity="0.95" />
+        <rect x="25.5" y="0" width="7" height="30" rx="3.5" fill="url(#logo-accent)" />
+      </g>
 
-      {/* Lightning bolt — represents sharp movement detection */}
-      <path
-        d="M35 12 L20 36 h9 L24 54 L44 28 h-11 z"
-        fill="url(#logo-bolt)"
-        stroke="#065f46"
-        strokeWidth="0.5"
-        strokeLinejoin="round"
-      />
-
-      {/* Glow effect on bolt tip */}
-      <circle cx="44" cy="28" r="2" fill="#34d399" opacity="0.6" />
-
-      {/* Top border accent */}
-      <rect x="0" y="0" width="64" height="3" rx="1.5" fill="url(#logo-bolt)" opacity="0.5" />
+      {/* Soft glow on tallest bar */}
+      <circle cx="41" cy="17" r="2.5" fill="#5eead4" opacity="0.3" />
     </svg>
   );
 }
