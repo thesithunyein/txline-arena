@@ -11,6 +11,7 @@ import { MatchesCard } from '../components/MatchesCard';
 import { PredictionAccuracyCard } from '../components/PredictionAccuracyCard';
 import { ConsensusCard } from '../components/ConsensusCard';
 import { AttributionCard } from '../components/AttributionCard';
+import { Logo } from '../components/Logo';
 
 export default function OverviewPage() {
   const [health, setHealth] = useState<HealthData | null>(null);
@@ -55,6 +56,9 @@ export default function OverviewPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50" />
         <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(16,185,129,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(6,182,212,0.1) 0%, transparent 50%)' }} />
         <div className="relative px-4">
+          <div className="flex justify-center mb-6">
+            <Logo className="h-16 w-16 rounded-2xl shadow-lg shadow-emerald-500/10" />
+          </div>
           <h1 className="page-header mb-4 text-balance">
             Autonomous trading on{' '}
             <span className="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
