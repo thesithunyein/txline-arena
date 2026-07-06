@@ -10,7 +10,7 @@ pinned: false
 
 <div align="center">
 
-<img src="./logo.svg" alt="TxLINE Arena Logo" width="120" height="120">
+<img src="./logo.svg?v=2" alt="TxLINE Arena Logo" width="120" height="120">
 
 # TxLINE Arena
 
