@@ -23,7 +23,7 @@ pinned: false
 
 [![Mode: LIVE](https://img.shields.io/badge/MODE-LIVE%20DATA-success?style=flat-square)](https://txline-arena.vercel.app/)
 [![Chain: Solana Devnet](https://img.shields.io/badge/CHAIN-Solana%20Devnet-9945FF?style=flat-square)](https://explorer.solana.com/address/MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr?cluster=devnet)
-[![On-Chain Txs: 15](https://img.shields.io/badge/On--Chain%20TXs-15%20verified-orange?style=flat-square)](https://explorer.solana.com/address/MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr?cluster=devnet)
+[![On-Chain Txs: 39](https://img.shields.io/badge/On--Chain%20TXs-39%20verified-orange?style=flat-square)](https://explorer.solana.com/address/MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr?cluster=devnet)
 [![Agents: 4](https://img.shields.io/badge/Agents-4%20strategies-violet?style=flat-square)](https://txline-arena.vercel.app/agents)
 [![License: MIT](https://img.shields.io/badge/License-MIT-purple?style=flat-square)](LICENSE)
 [![Build: Passing](https://img.shields.io/badge/Build-Passing-brightgreen?style=flat-square)](https://github.com/thesithunyein/txline-arena)
