@@ -5,7 +5,7 @@ import { Bot, Pause, TrendingUp, TrendingDown, DollarSign, Repeat, ExternalLink 
 import { fetchApi, AgentData, PositionData, LeaderboardEntry, MatchData } from '../../lib/api';
 import { useWebSocket, ArenaEvent } from '../../lib/ws';
 import { formatPnl, formatPct } from '../../lib/utils';
-import { getFlag } from '../../lib/flags';
+import { Flag } from '../../components/Flag';
 
 const AGENT_ICONS: Record<string, any> = {
   Momentum: TrendingUp,
@@ -54,14 +54,18 @@ export default function AgentsPage() {
   });
 
   const agentPositions = selectedAgent ? positions.filter((p) => p.agentName === selectedAgent) : positions;
-  const matchName = (fixtureId: number) => {
+  const matchLabel = (fixtureId: number) => {
     const m = matches.find((x) => x.fixtureId === fixtureId);
-    if (m) {
-      const hf = getFlag(m.home);
-      const af = getFlag(m.away);
-      return `${hf} ${m.home} vs ${af} ${m.away}`;
-    }
-    return `#${fixtureId}`;
+    if (!m) return <span>#{fixtureId}</span>;
+    return (
+      <span className="inline-flex items-center gap-1.5">
+        <Flag team={m.home} size={14} />
+        {m.home}
+        <span className="text-gray-400 font-normal">vs</span>
+        <Flag team={m.away} size={14} />
+        {m.away}
+      </span>
+    );
   };
 
   return (
@@ -144,7 +148,7 @@ export default function AgentsPage() {
               {agentPositions.map((pos) => (
                 <tr key={pos.id} className="border-b border-gray-100 hover:bg-gray-50">
                   <td className="py-3 pr-4 text-gray-900 font-medium">{pos.agentName}</td>
-                  <td className="py-3 pr-4 text-gray-600">{matchName(pos.fixtureId)}</td>
+                  <td className="py-3 pr-4 text-gray-600">{matchLabel(pos.fixtureId)}</td>
                   <td className="py-3 pr-4">
                     <span className="badge badge-blue capitalize">{pos.side}</span>
                   </td>

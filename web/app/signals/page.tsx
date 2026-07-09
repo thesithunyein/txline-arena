@@ -5,7 +5,7 @@ import { Zap, TrendingDown, TrendingUp, CheckCircle, XCircle } from 'lucide-reac
 import { fetchApi, SignalData } from '../../lib/api';
 import { useWebSocket, ArenaEvent } from '../../lib/ws';
 import { formatTime, formatPct } from '../../lib/utils';
-import { getFlag } from '../../lib/flags';
+import { Flag } from '../../components/Flag';
 
 export default function SignalsPage() {
   const [signals, setSignals] = useState<SignalData[]>([]);
@@ -90,7 +90,7 @@ export default function SignalsPage() {
                     {signal.match.split(' vs ').map((team, i) => (
                       <span key={i}>
                         {i > 0 && <span className="text-gray-400 font-normal"> vs </span>}
-                        <span className="mr-1">{getFlag(team)}</span>{team}
+                        <Flag team={team} size={14} className="mr-1" />{team}
                       </span>
                     ))}
                   </td>
