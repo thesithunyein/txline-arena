@@ -5,6 +5,50 @@ import { WebSocketServer, WebSocket } from 'ws';
 import { ArenaManager, ArenaEvent } from '../arena/manager';
 import { getRecentSignals, getAgentPositions, getLeaderboard as getDbLeaderboard, getMatches, getAllPositions } from '../db/database';
 import { BacktestEngine, generateSyntheticBacktestData } from '../backtest/engine';
+import { AgentStats } from '../agents/base';
+
+/** Prefer persisted DB stats when the arena has trading history (single source of truth for judges). */
+function mergeAgentStats(inMemory: AgentStats, db?: {
+  bankroll: number;
+  totalPnl: number;
+  totalPositions: number;
+  wins: number;
+  losses: number;
+  paused: boolean;
+}): AgentStats {
+  if (!db || db.totalPositions === 0) return inMemory;
+  return {
+    ...inMemory,
+    bankroll: db.bankroll,
+    totalPnl: db.totalPnl,
+    totalPositions: db.totalPositions,
+    wins: db.wins,
+    losses: db.losses,
+    winRate: db.totalPositions > 0 ? db.wins / db.totalPositions : 0,
+    roi: db.bankroll > 0 ? (db.totalPnl / (db.bankroll - db.totalPnl)) * 100 : 0,
+    paused: db.paused,
+  };
+}
+
+function mergeLeaderboardEntry(entry: any, db?: {
+  bankroll: number;
+  totalPnl: number;
+  totalPositions: number;
+  wins: number;
+  losses: number;
+  paused: boolean;
+}) {
+  if (!db || db.totalPositions === 0) return entry;
+  return {
+    ...entry,
+    bankroll: db.bankroll,
+    totalPnl: db.totalPnl,
+    totalPositions: db.totalPositions,
+    winRate: db.totalPositions > 0 ? db.wins / db.totalPositions : 0,
+    roi: db.bankroll > 0 ? (db.totalPnl / (db.bankroll - db.totalPnl)) * 100 : 0,
+    paused: db.paused,
+  };
+}
 
 function computeConsensusIndex(positions: any[], signals: any[]): any {
   const settled = positions.filter((p) => p.status === 'settled' && p.pnl !== null);
@@ -148,16 +192,23 @@ export class Server {
   }
 
   private setupRoutes(): void {
-    const healthHandler = (_req: any, res: any) => {
+    const healthHandler = async (_req: any, res: any) => {
+      const dbAgents = await getDbLeaderboard();
+      const dbMap = new Map(dbAgents.map((a) => [a.name, a]));
       res.json({
         status: 'ok',
         mode: process.env.LIVE_MODE === 'true' ? 'live' : 'simulation',
         timestamp: Date.now(),
-        agents: this.arena.getAgents().map((a) => ({
-          name: a.name,
-          bankroll: a.getBankroll(),
-          paused: a.isPaused(),
-        })),
+        agents: this.arena.getAgents().map((a) => {
+          const merged = mergeAgentStats(a.getStats(), dbMap.get(a.name));
+          return {
+            name: merged.name,
+            bankroll: merged.bankroll,
+            totalPnl: merged.totalPnl,
+            totalPositions: merged.totalPositions,
+            paused: merged.paused,
+          };
+        }),
       });
     };
 
@@ -172,25 +223,8 @@ export class Server {
     this.app.get('/api/agents', async (_req, res) => {
       const inMemory = this.arena.getAgents().map((a) => a.getStats());
       const dbAgents = await getDbLeaderboard();
-      const dbMap = new Map(dbAgents.map(a => [a.name, a]));
-      const merged = inMemory.map(stats => {
-        const db = dbMap.get(stats.name);
-        if (db) {
-          return {
-            ...stats,
-            bankroll: db.bankroll,
-            totalPnl: db.totalPnl,
-            totalPositions: db.totalPositions,
-            wins: db.wins,
-            losses: db.losses,
-            winRate: db.totalPositions > 0 ? db.wins / db.totalPositions : 0,
-            roi: db.bankroll > 0 ? (db.totalPnl / (db.bankroll - db.totalPnl)) * 100 : 0,
-            paused: db.paused,
-          };
-        }
-        return stats;
-      });
-      res.json(merged);
+      const dbMap = new Map(dbAgents.map((a) => [a.name, a]));
+      res.json(inMemory.map((stats) => mergeAgentStats(stats, dbMap.get(stats.name))));
     });
 
     this.app.get('/api/agents/:name/positions', async (req, res) => {
@@ -198,31 +232,20 @@ export class Server {
       res.json(await getAgentPositions(req.params.name, status));
     });
 
-    this.app.get('/api/positions', async (_req, res) => {
-      res.json(await getAllPositions());
+    this.app.get('/api/positions', async (req, res) => {
+      const limit = parseInt(req.query.limit as string) || 0;
+      res.json(await getAllPositions(limit > 0 ? limit : undefined));
     });
 
     this.app.get('/api/leaderboard', async (_req, res) => {
       const inMemory = this.arena.getLeaderboard().getRankings();
       const dbAgents = await getDbLeaderboard();
-      const dbMap = new Map(dbAgents.map(a => [a.name, a]));
-      const merged = inMemory.map(entry => {
-        const db = dbMap.get(entry.name);
-        if (db) {
-          return {
-            ...entry,
-            bankroll: db.bankroll,
-            totalPnl: db.totalPnl,
-            totalPositions: db.totalPositions,
-            winRate: db.totalPositions > 0 ? db.wins / db.totalPositions : 0,
-            roi: db.bankroll > 0 ? (db.totalPnl / (db.bankroll - db.totalPnl)) * 100 : 0,
-            paused: db.paused,
-          };
-        }
-        return entry;
-      });
+      const dbMap = new Map(dbAgents.map((a) => [a.name, a]));
+      const merged = inMemory.map((entry) => mergeLeaderboardEntry(entry, dbMap.get(entry.name)));
       merged.sort((a, b) => b.totalPnl - a.totalPnl);
-      merged.forEach((e, i) => { e.rank = i + 1; });
+      merged.forEach((e, i) => {
+        e.rank = i + 1;
+      });
       res.json(merged);
     });
 
@@ -231,12 +254,12 @@ export class Server {
     });
 
     this.app.get('/api/consensus', async (_req, res) => {
-      const [positions, signals] = await Promise.all([getAllPositions(), getRecentSignals(200)]);
+      const [positions, signals] = await Promise.all([getAllPositions(200), getRecentSignals(200)]);
       res.json(computeConsensusIndex(positions, signals));
     });
 
     this.app.get('/api/attribution', async (_req, res) => {
-      const [positions, signals] = await Promise.all([getAllPositions(), getRecentSignals(200)]);
+      const [positions, signals] = await Promise.all([getAllPositions(200), getRecentSignals(200)]);
       res.json(computeAttribution(positions, signals));
     });
 

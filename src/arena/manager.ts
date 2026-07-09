@@ -5,7 +5,7 @@ import { SharpMovementDetector } from '../engine/detector';
 import { PredictionTracker } from '../engine/predictor';
 import { Leaderboard } from './leaderboard';
 import { CircuitBreaker } from './circuitBreaker';
-import { computeConsensusOdds } from '../txline/client';
+import { computeConsensusOdds, getStatValidation } from '../txline/client';
 import { insertSignal, insertPosition, settlePosition, upsertMatch, upsertAgent, updateAgentStats, setAgentPaused } from '../db/database';
 import { anchorSettlement, isOnChainSettlementEnabled } from '../chain/settlement';
 
@@ -16,6 +16,10 @@ export interface ArenaEvent {
 }
 
 type ArenaEventListener = (event: ArenaEvent) => void;
+
+// TxLINE soccer full-game stat keys (see scores/soccer-feed docs)
+const HOME_GOALS_STAT_KEY = 1;
+const AWAY_GOALS_STAT_KEY = 2;
 
 export class ArenaManager {
   private agents: BaseAgent[] = [];
@@ -127,7 +131,9 @@ export class ArenaManager {
     });
 
     if (score.gameState === 'FT' || score.gameState === 'Finished') {
-      this.handleMatchEnd(score);
+      this.handleMatchEnd(score).catch((err) =>
+        console.error(`Match-end settlement failed for fixture ${score.fixtureId}:`, err?.message || err),
+      );
     }
   }
 
@@ -202,7 +208,43 @@ export class ArenaManager {
     });
   }
 
-  private handleMatchEnd(score: ScoreUpdate): void {
+  private async verifyScoreOutcome(score: ScoreUpdate): Promise<boolean> {
+    try {
+      const validation = await getStatValidation(
+        score.fixtureId,
+        score.seq,
+        HOME_GOALS_STAT_KEY,
+        AWAY_GOALS_STAT_KEY,
+      );
+      const homeOk =
+        validation.statToProve.statKey === HOME_GOALS_STAT_KEY &&
+        validation.statToProve.statValue === score.homeScore;
+      const awayOk =
+        validation.statToProve2?.statKey === AWAY_GOALS_STAT_KEY &&
+        validation.statToProve2?.statValue === score.awayScore;
+      if (!homeOk || !awayOk) {
+        console.warn(
+          `[SETTLE] stat-validation mismatch fixture=${score.fixtureId}: ` +
+            `feed ${score.homeScore}-${score.awayScore}, ` +
+            `proved ${validation.statToProve.statValue}-${validation.statToProve2?.statValue ?? '?'}`,
+        );
+        return false;
+      }
+      console.log(`[SETTLE] stat-validation OK fixture=${score.fixtureId} seq=${score.seq}`);
+      return true;
+    } catch (err: any) {
+      console.warn(`[SETTLE] stat-validation unavailable: ${err?.message || err}`);
+      // Allow settlement when API is unreachable unless strict mode is enabled
+      return process.env.REQUIRE_STAT_VALIDATION !== 'true';
+    }
+  }
+
+  private async handleMatchEnd(score: ScoreUpdate): Promise<void> {
+    const verified = await this.verifyScoreOutcome(score);
+    if (!verified) {
+      console.error(`[SETTLE] Skipping settlement for fixture ${score.fixtureId} — outcome not cryptographically verified`);
+      return;
+    }
     const fixtureId = score.fixtureId;
     const homeScore = score.homeScore;
     const awayScore = score.awayScore;

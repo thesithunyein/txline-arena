@@ -22,18 +22,16 @@ export default function OverviewPage() {
 
   useEffect(() => {
     async function load() {
-      try {
-        const [h, s, lb, m] = await Promise.all([
-          fetchApi<HealthData>('/health').catch(() => null),
-          fetchApi<SignalData[]>('/signals?limit=200').catch(() => []),
-          fetchApi<LeaderboardEntry[]>('/leaderboard').catch(() => []),
-          fetchApi<MatchData[]>('/matches').catch(() => []),
-        ]);
-        if (h) setHealth(h);
-        setSignals(s);
-        setLeaderboard(lb);
-        setMatches(m);
-      } catch {}
+      const [h, s, lb, m] = await Promise.all([
+        fetchApi<HealthData>('/health'),
+        fetchApi<SignalData[]>('/signals?limit=200'),
+        fetchApi<LeaderboardEntry[]>('/leaderboard'),
+        fetchApi<MatchData[]>('/matches'),
+      ]);
+      setHealth(h);
+      setSignals(s);
+      setLeaderboard(lb);
+      setMatches(m);
     }
     load();
     const interval = setInterval(load, 10000);

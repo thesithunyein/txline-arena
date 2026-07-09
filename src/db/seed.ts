@@ -59,14 +59,27 @@ const REAL_TX_SIGNATURES: string[] = [
   '4Vd6hBk97hJtwGyCW8qSbiEcW5NctGYZyXMGMw9p8TarmWNgX5fcHYDYctHd8G6PBRCy6dTuqhapVYtwDbRZscSU',
 ];
 
-export async function seedIfEmpty(matches: MatchRecord[]): Promise<boolean> {
+/** Live mode: only persist fixture metadata — never fabricate signals/positions. */
+export async function seedMatchesOnlyIfEmpty(matches: MatchRecord[]): Promise<boolean> {
+  const db = await getDb();
+  if (db.data.matches.length > 0) return false;
+
+  console.log('[SEED] Seeding fixture metadata only (live mode)...');
+  db.data.matches = matches.map((m) => ({ ...m, lastUpdated: Date.now() }));
+  await db.write();
+  console.log(`[SEED] Stored ${matches.length} fixtures`);
+  return true;
+}
+
+/** Simulation / post-tournament replay: deterministic demo history for judges. */
+export async function seedDemoHistoryIfEmpty(matches: MatchRecord[]): Promise<boolean> {
   const db = await getDb();
 
   if (db.data.signals.length > 0) {
     return false;
   }
 
-  console.log('[SEED] Database is empty — seeding historical data for demo...');
+  console.log('[SEED] Database is empty — seeding demo replay history...');
 
   const rng = seededRandom(42);
   const now = Date.now();
@@ -194,6 +207,15 @@ export async function seedIfEmpty(matches: MatchRecord[]): Promise<boolean> {
   db.data.agents = agents;
   await db.write();
 
+  if (db.data.matches.length === 0) {
+    db.data.matches = matches.map((m) => ({ ...m, lastUpdated: Date.now() }));
+  }
+
   console.log(`[SEED] Seeded ${signals.length} signals, ${positions.length} positions, ${agents.length} agents`);
   return true;
+}
+
+/** @deprecated Use seedDemoHistoryIfEmpty or seedMatchesOnlyIfEmpty */
+export async function seedIfEmpty(matches: MatchRecord[]): Promise<boolean> {
+  return seedDemoHistoryIfEmpty(matches);
 }

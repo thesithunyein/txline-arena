@@ -12,7 +12,10 @@ export default function OnChainPage() {
   const [positions, setPositions] = useState<PositionData[]>([]);
 
   useEffect(() => {
-    fetchApi<PositionData[]>('/positions').then(setPositions).catch(() => setPositions([]));
+    const load = () => fetchApi<PositionData[]>('/positions?limit=50').then(setPositions);
+    load();
+    const interval = setInterval(load, 15000);
+    return () => clearInterval(interval);
   }, []);
 
   const settledWithTx = positions.filter((p) => p.status === 'settled' && p.settlementTx);

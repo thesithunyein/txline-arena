@@ -1,49 +1,41 @@
 import { demoForPath } from './demo';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || '/api';
-// Force the deterministic replay dataset (useful for the public demo link / video).
 const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
 
-// Fail fast if the backend is unreachable so the dashboard falls back to
-// replay data instead of sitting empty. Generous enough for cross-region
-// round-trips to the Hugging Face Space.
-const FETCH_TIMEOUT_MS = 8000;
+// Hugging Face Spaces cold-starts can take 20–30s; retry before falling back to replay data.
+const FETCH_TIMEOUT_MS = 25000;
+const FETCH_RETRIES = 2;
+
+async function fetchWithTimeout(url: string, attempt = 0): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  try {
+    const res = await fetch(url, { cache: 'no-store', signal: controller.signal });
+    clearTimeout(timer);
+    return res;
+  } catch (err) {
+    clearTimeout(timer);
+    if (attempt < FETCH_RETRIES) {
+      await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
+      return fetchWithTimeout(url, attempt + 1);
+    }
+    throw err;
+  }
+}
 
 export async function fetchApi<T>(path: string): Promise<T> {
   if (DEMO_MODE) return demoForPath<T>(path);
   try {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
-    const res = await fetch(`${API_BASE}${path}`, { cache: 'no-store', signal: controller.signal });
-    clearTimeout(timer);
+    const res = await fetchWithTimeout(`${API_BASE}${path}`);
     if (!res.ok) throw new Error(`API error: ${res.status}`);
     const data = await res.json();
-    // Empty live responses (e.g. after matches end) fall back to replay data so
-    // the dashboard always demonstrates the product working.
+    // Empty responses after tournament ends — fall back to deterministic replay for judges.
     if (data == null || (Array.isArray(data) && data.length === 0)) return demoForPath<T>(path);
-    // Sparse data detection: if leaderboard/agents have no real activity
-    // (all 0 P&L and 0 positions), fall back to demo so the dashboard
-    // always looks alive for judges — even before the backend seeds.
-    if (Array.isArray(data) && data.length > 0 && isSparseData(path, data)) {
-      return demoForPath<T>(path);
-    }
     return data as T;
   } catch {
-    // No backend reachable (e.g. static Vercel link) — serve replay data.
     return demoForPath<T>(path);
   }
-}
-
-function isSparseData(path: string, data: any[]): boolean {
-  const clean = path.split('?')[0];
-  if (clean === '/leaderboard' || clean === '/agents') {
-    return data.every(
-      (entry) =>
-        (entry.totalPnl === 0 || entry.totalPnl === undefined) &&
-        (entry.totalPositions === 0 || entry.totalPositions === undefined),
-    );
-  }
-  return false;
 }
 
 export interface SignalData {
@@ -124,5 +116,5 @@ export interface HealthData {
   status: string;
   mode: string;
   timestamp: number;
-  agents: Array<{ name: string; bankroll: number; paused: boolean }>;
+  agents: Array<{ name: string; bankroll: number; totalPnl?: number; totalPositions?: number; paused: boolean }>;
 }

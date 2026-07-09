@@ -18,7 +18,7 @@ import { MatchInfo } from './txline/types';
 import { MatchRecord } from './db/schema';
 import { sendSignalAlert, sendPositionAlert, sendSettlementAlert, sendLeaderboardAlert, isTelegramEnabled } from './alerts/telegram';
 import { getDb, closeDb } from './db/database';
-import { seedIfEmpty } from './db/seed';
+import { seedDemoHistoryIfEmpty, seedMatchesOnlyIfEmpty } from './db/seed';
 
 const PORT = parseInt(process.env.PORT || '3001');
 const LIVE_MODE = process.env.LIVE_MODE !== 'false';
@@ -128,8 +128,8 @@ async function startLive(arena: ArenaManager): Promise<void> {
       });
     }
 
-    // Seed historical data if DB is empty so the dashboard looks alive
-    await seedIfEmpty(matchRecords);
+    // Live mode: fixture metadata only — agents build real history from TxLINE streams
+    await seedMatchesOnlyIfEmpty(matchRecords);
   } catch (err) {
     console.error('Failed to fetch fixtures:', err);
     console.log('Falling back to SIMULATION mode...');
@@ -175,8 +175,8 @@ async function startSimulation(arena: ArenaManager): Promise<void> {
     arena.updateMatchInfo(match);
   }
 
-  // Seed historical data if DB is empty
-  await seedIfEmpty(simMatches.map(m => ({
+  // Simulation: seed replay history so the dashboard is never empty for judges
+  await seedDemoHistoryIfEmpty(simMatches.map(m => ({
     fixtureId: m.fixtureId,
     home: m.home,
     away: m.away,

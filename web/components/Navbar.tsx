@@ -22,9 +22,7 @@ export function Navbar() {
 
   useEffect(() => {
     const load = () =>
-      fetchApi<{ mode: 'live' | 'simulation' }>('/mode')
-        .then((d) => setMode(d.mode))
-        .catch(() => setMode('simulation'));
+      fetchApi<{ mode: 'live' | 'simulation' }>('/mode').then((d) => setMode(d.mode));
     load();
     const interval = setInterval(load, 15000);
     return () => clearInterval(interval);

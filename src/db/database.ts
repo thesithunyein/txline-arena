@@ -197,9 +197,10 @@ export async function getAgentPositions(agentName: string, status?: string): Pro
   return [...positions].reverse();
 }
 
-export async function getAllPositions(): Promise<PositionRecord[]> {
+export async function getAllPositions(limit?: number): Promise<PositionRecord[]> {
   const database = await getDb();
-  return [...database.data.positions].reverse();
+  const all = [...database.data.positions].reverse();
+  return limit ? all.slice(0, limit) : all;
 }
 
 export async function getLeaderboard(): Promise<AgentRecord[]> {

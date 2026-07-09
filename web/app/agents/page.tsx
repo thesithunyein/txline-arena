@@ -30,18 +30,16 @@ export default function AgentsPage() {
 
   useEffect(() => {
     async function load() {
-      try {
-        const [a, lb, p, m] = await Promise.all([
-          fetchApi<AgentData[]>('/agents').catch(() => []),
-          fetchApi<LeaderboardEntry[]>('/leaderboard').catch(() => []),
-          fetchApi<PositionData[]>('/positions').catch(() => []),
-          fetchApi<MatchData[]>('/matches').catch(() => []),
-        ]);
-        setAgents(a);
-        setLeaderboard(lb);
-        setPositions(p);
-        setMatches(m);
-      } catch {}
+      const [a, lb, p, m] = await Promise.all([
+        fetchApi<AgentData[]>('/agents'),
+        fetchApi<LeaderboardEntry[]>('/leaderboard'),
+        fetchApi<PositionData[]>('/positions?limit=80'),
+        fetchApi<MatchData[]>('/matches'),
+      ]);
+      setAgents(a);
+      setLeaderboard(lb);
+      setPositions(p);
+      setMatches(m);
     }
     load();
     const interval = setInterval(load, 5000);
